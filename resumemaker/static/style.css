@@ -1,0 +1,51 @@
+body {
+    font-family: 'EB Garamond', Garamond, serif;
+}
+
+div#content {
+    margin: 2% 2%;
+}
+
+h1 {
+    font-family: 'EB Garamond', Garamond, serif;
+    font-size: 3em;
+    font-weight: normal;
+    margin: 0 0 0 5%;
+    clear: both;
+}
+
+h2{
+    font-family: 'EB Garamond', Garamond, serif;
+    font-size: 1.75em;
+    font-weight: normal;
+}
+
+h3{
+    font-family: 'EB Garamond', Garamond, serif;
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+a {
+    color: #333;
+}
+
+ul#nav {
+    display: block;
+    margin: 0 5%;
+    padding: 0;
+    list-style-type: none;
+    font-family: 'EB Garamond', Garamond, serif;
+}
+
+ul#nav li {
+    display: inline; /* make flat */
+}
+
+ul#nav a {
+    display: block;
+    float: left;
+    padding: 0 1em;
+    text-decoration: none;
+    color: #333;
+}

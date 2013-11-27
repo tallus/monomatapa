@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+<title>strange weather::{% if title -%}{{title}}{% endif %}</title>
+{% if css %}
+<link href="{css}}" rel="stylesheet" type="text/css"  />
+{% else %}
+<link href="/static/style.css" rel="stylesheet" type="text/css"  />
+{% endif %}
+</head>
+<body>
+    <div id="nav">
+       <ul id="nav">
+            <li><a href="/">home</a></li>
+            <li><a href="/about">about</a></li>
+            <li><a href="/colophon">colophon</a></li>
+        </ul>
+    </div>
+    <div>
+        <h1>{% if heading -%}{{heading}}{% else -%}Paul Munday.{% endif %}</h1>
+    <div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    <div id = "content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
