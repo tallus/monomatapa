@@ -8,6 +8,11 @@
 {% else %}
 <link href="/static/style.css" rel="stylesheet" type="text/css"  />
 {% endif %}
+{% if internal_css %}
+<style type="text/css">
+    {{internal_css}}
+</style>
+{% endif %}
 </head>
 <body>
     <div id="nav">
