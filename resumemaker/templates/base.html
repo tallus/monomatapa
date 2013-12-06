@@ -3,10 +3,11 @@
 <head>
 <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
 <title>paulmunday.net::{% if title -%}{{title}}{% endif %}</title>
-{% if css %}
-<link href="{css}}" rel="stylesheet" type="text/css"  />
-{% else %}
 <link href="/static/style.css" rel="stylesheet" type="text/css"  />
+{% if css %}
+    {% for file in css %}
+        <link href="{{file}}" rel="stylesheet" type="text/css"  />
+    {% endfor %}
 {% endif %}
 {% if internal_css %}
 <style type="text/css">
@@ -24,7 +25,7 @@
         </ul>
     </div>
     <div>
-        <h1>{% if heading -%}{{heading}}{% else -%}Paul Munday.{% endif %}</h1>
+        {% if heading %}<h1>{{heading}}</h1>{% endif %}
     <div>
         <hr>
         {% with messages = get_flashed_messages() %}
@@ -37,5 +38,10 @@
     <div id = "content">
         {% block content %}{% endblock %}
     </div>
+    {% if foo %}
+    {% for word in foo %}
+    {{word}}
+    {% endfor %}
+    {% endif %}
 </body>
 </html>
