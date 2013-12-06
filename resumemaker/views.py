@@ -66,10 +66,7 @@ def static_page(srcfile, heading=None, title=None):
     def page_generator(heading=heading, title=title):
         src = render_markdown(src_file(srcfile, 'src'))
         if not src:
-            return render_template("static.html",
-                title = title, heading = heading, 
-                contents = Markup(srcfile))
-            #abort(404)
+            abort(404)
         else:
             if not heading:
                 heading = os.path.splitext(srcfile)[0].capitalize()
@@ -82,7 +79,7 @@ def static_page(srcfile, heading=None, title=None):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    '''basic 404 page'''
+    ''' provides basic 404 page'''
     return render_template('static.html', 
             title = "404::page not found", heading = "Page Not Found", 
             contents = Markup(
