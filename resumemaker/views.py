@@ -16,8 +16,13 @@ import markdown
 
 from resumemaker import app
 
-path = os.path.join(getcwd(), 'resumemaker')
-srcpath = os.path.join(path, 'src')
+def src_file(name, directory=None):
+    '''return path to file in this app'''
+    if not directory:
+        return os.path.join(getcwd(), 'resumemaker', name)
+    else:
+        return os.path.join(getcwd(), 'resumemaker', directory, name)
+    
 
 def render_markdown(file):
     '''Return (trusted) markdown file rendered as html.'''
@@ -26,14 +31,14 @@ def render_markdown(file):
 
 @app.route("/", methods = ['GET', 'POST'])
 def index():
-    src= render_markdown(os.path.join(srcpath, 'resume.md'))
+    src= render_markdown(src_file('resume.md', 'src'))
     return render_template("static.html",
         title = "resume", heading = "Paul Munday", 
         contents = Markup(src))
 
 @app.route("/src")
 def source():
-    with open(os.path.join(path, 'views.py'), 'r') as f:
+    with open(src_file('views.py'), 'r') as f:
         src = f.read()
     code = highlight(src, PythonLexer(), HtmlFormatter())
     css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
@@ -43,14 +48,14 @@ def source():
 
 @app.route("/about/")
 def about():
-    src = render_markdown(os.path.join(srcpath, 'about.md'))
+    src = render_markdown(src_file('about.md', 'src'))
     return render_template("static.html", 
         title = "about", heading = "About This Website", 
         contents = Markup(src))
 
 @app.route("/colophon/")
 def colophon():
-    src = render_markdown(os.path.join(srcpath, 'colophon.md'))
+    src = render_markdown(src_file('colophon.md', 'src'))
     return render_template("static.html", 
         title = "colophon", heading = "Colophon", 
         contents = Markup(src))
