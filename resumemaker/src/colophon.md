@@ -1,6 +1,6 @@
 ### A note about the technology ###
 
-*This was made using the [Flask](http://flask.pocoo.org)microframework for [Python(http://www.python.org).*
+*This was made using the [Flask](http://flask.pocoo.org) microframework for [Python(http://www.python.org).*
 
 ### A note about the type ###
 
