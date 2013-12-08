@@ -1,15 +1,15 @@
 ## Key Skills
 **Programming**
-    *Core competencies:* Python and Bash/Shell Scripting. *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound & HTML/CSS. 
+    *Core competencies:* Python, Bash/Shell Scripting, Git, Test driven development.  *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound & HTML/CSS. 
 
 **Linux/Unix Systems and Network Administration**
-    High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management e.g Salt stack.Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and internet technologies.
+    High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric. Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and internet technologies.
  
 
 ## Past Work
 
 **November 2010&ndash;Present : 
-Technical Support Specialist/Co-ordinator** at Free Geek. Managed paid workers and volunteers, and provided Level 3 support, in a department providing  hardware and Linux based software tech support for up to 2000 end users. Outside of core duties my initial focus was on rebuilding a chaotic paper based system that often lead to delays of several weeks. By introducing standardized procedures and efficient use of an electronic ticketing system I was able to achieve a target turn around time of three days or less. My current focus has been on developing software tools for internal use including a backup and system replication tool and a number of  libraries and tools for interacting with the ticket system's API. In addition I undertook extensive organizational development outside my department and assisted in systems administration where needed. 
+Technical Support Specialist/Co-ordinator** at Free Geek. Managed paid workers and volunteers, and provided Level 3 support, in a department providing  hardware and Linux based software tech support for up to 2000 end users. Outside of core duties my initial focus was on rebuilding a chaotic paper based system that often lead to delays of several weeks. By introducing standardized procedures and efficient use of an electronic ticketing system I was able to achieve a target turn around time of three days or less. My current focus has been on developing software tools for internal use including a backup and system replication tool and a number of  libraries and tools for interacting with the ticket system's API. In addition I did extensive organizational development outside my department and assisted in systems administration where needed. 
 
 **April 2010&ndash;November 2010:
 Tutor**, SUN project Ron Russell Middle School. Worked as  part time tutor at a after school project teaching IT related courses (e.g. web design).
@@ -20,7 +20,7 @@ Tutor**, SUN project Ron Russell Middle School. Worked as  part time tutor at a 
 Systems Administrator**, Red Snapper Ltd. Long established web agency with blue chip clients. Responsible for all systems administration. Developed high availability hosting solution. 
 
 **September 2003&ndash;September 2005:
-Tutor**, Bristol Wireless Co-operative. Taught courses, undertook design work, as well as assisting systems administration. 
+Tutor**, Bristol Wireless Co-operative. Taught courses, did design work, as well as assisting systems administration. 
 
 **June 2000&ndash;December 2002
 Systems Administrator**, 2Bet Ltd. Responsible for all systems and network administration for a software development company. 
