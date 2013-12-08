@@ -46,9 +46,9 @@ def get_static_attributes(page):
 def src_file(name, directory=None):
     '''return path to file in this app'''
     if not directory:
-        return os.path.join(getcwd(), 'resumemaker', name)
+        return os.path.join( 'resumemaker', name)
     else:
-        return os.path.join(getcwd(), 'resumemaker', directory, name)
+        return os.path.join('resumemaker', directory, name)
     
 
 def render_markdown(file):
