@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from flask import render_template, flash, redirect, abort
-from flask import Markup 
+from flask import Markup, escape
 
 from pygments import highlight
 from pygments.lexers import PythonLexer
@@ -51,11 +51,21 @@ def src_file(name, directory=None):
         return os.path.join('resumemaker', directory, name)
     
 
-def render_markdown(file):
-    '''Return (trusted) markdown file rendered as html.'''
+def render_trusted_markdown(file):
+    '''Return trusted markdown file rendered as html.
+    Allows html in source file'''
     try:
         with open(file, 'r') as f:
             return markdown.markdown(f.read())
+    except IOError:
+           return None
+
+
+def render_markdown(file):
+    '''Return (untrusted) markdown file rendered as html.'''
+    try:
+        with open(file, 'r') as f:
+            return markdown.markdown(escape(f.read()))
     except IOError:
            return None
 
