@@ -50,22 +50,16 @@ def src_file(name, directory=None):
     else:
         return os.path.join('resumemaker', directory, name)
     
-
-def render_trusted_markdown(file):
-    '''Return trusted markdown file rendered as html.
-    Allows html in source file'''
+def render_markdown(file, trusted=False):
+    '''Return markdown file rendered as html. Defaults to untrusted:
+        html characters are escaped so will not be rendered.
+        This departs from markdown spec which allows embedded html.'''
     try:
         with open(file, 'r') as f:
-            return markdown.markdown(f.read())
-    except IOError:
-           return None
-
-
-def render_markdown(file):
-    '''Return (untrusted) markdown file rendered as html.'''
-    try:
-        with open(file, 'r') as f:
-            return markdown.markdown(escape(f.read()))
+            if trusted == True:
+                return markdown.markdown(f.read())
+            else:
+                return markdown.markdown(escape(f.read()))
     except IOError:
            return None
 
