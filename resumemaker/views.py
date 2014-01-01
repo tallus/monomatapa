@@ -27,20 +27,22 @@ static_pages = OrderedDict({
         'name' : 'home',
         'src' : 'resume.md',
         'title' : 'home', 
-        'heading' : 'Paul Munday'
+        'heading' : 'Paul Munday',
+        'trusted' : True,
         }
     })
 
 def get_static_attributes(page):
     '''return attributes for static pages (if present)'''
     srcfile = page.rstrip('/') + '.md'
-    attributes = {'src': srcfile, 'title' : None, 'heading' : None}
+    attributes = {'src': srcfile, 
+            'title' : None, 'heading' : None, 'trusted': False}
     if page in static_pages:
         sp = static_pages[page]
-        for attribute in ['src', 'title' , 'heading']:
+        for attribute in ['src', 'title' , 'heading', 'trusted']:
             if attribute in sp:
                 attributes[attribute] = sp[attribute]
-    return attributes['src'], attributes['title'], attributes['heading']
+    return attributes['src'], attributes['title'], attributes['heading'], attributes['trusted']
 
 
 def src_file(name, directory=None):
@@ -52,8 +54,9 @@ def src_file(name, directory=None):
     
 def render_markdown(file, trusted=False):
     '''Return markdown file rendered as html. Defaults to untrusted:
-        html characters are escaped so will not be rendered.
-        This departs from markdown spec which allows embedded html.'''
+        html characters (and character entities) are escaped 
+        so will not be rendered. This departs from markdown spec 
+        which allows embedded html.'''
     try:
         with open(file, 'r') as f:
             if trusted == True:
@@ -63,12 +66,12 @@ def render_markdown(file, trusted=False):
     except IOError:
            return None
 
-def static_page(srcfile, heading=None, title=None):
+def static_page(srcfile, heading=None, title=None, trusted=False):
     '''return a page generator  function for static pages 
     written in Markdown under src/. Takes the name of the markdown file
     its title and main heading'''
     def page_generator(heading=heading, title=title):
-        src = render_markdown(src_file(srcfile, 'src'))
+        src = render_markdown(src_file(srcfile, 'src'), trusted)
         if not src:
             abort(404)
         else:
@@ -92,16 +95,17 @@ def page_not_found(e):
 @app.route("/")
 def index():
     '''provides index page'''
-    srcfile, title, heading = get_static_attributes('index')
-    return static_page(srcfile, title = title, heading = heading)
+    srcfile, title, heading, trusted = get_static_attributes('index')
+    return static_page(srcfile, title = title, heading = heading, trusted=trusted)
 
 @app.route("/<path:page>")
 def staticpage(page):
     '''displays /page or /page/ as long as src/page.md exists.
     srcfile, title and heading may be set in the pages global 
     (ordered) dictionary but are not required'''
-    srcfile, title, heading = get_static_attributes(page)
-    return static_page(srcfile, title = title, heading = heading)
+    srcfile, title, heading, trusted = get_static_attributes(page)
+    return static_page(srcfile, 
+            title = title, heading = heading, trusted=trusted)
 
 @app.route("/source")
 def source():

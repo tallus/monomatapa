@@ -3,12 +3,12 @@
     *Core competencies:* Python, Bash/Shell Scripting, Git, Test driven development.  *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound & HTML/CSS. 
 
 **Linux/Unix Systems and Network Administration**
-    High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric. Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and internet technologies.
+    High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric. Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and Internet technologies.
  
 
 ## Past Work
 
-**November 2010&ndash;Present : 
+**November 2010&ndash;December 2013 : 
 Technical Support Specialist/Co-ordinator** at Free Geek. Managed paid workers and volunteers, and provided Level 3 support, in a department providing  hardware and Linux based software tech support for up to 2000 end users. Outside of core duties my initial focus was on rebuilding a chaotic paper based system that often lead to delays of several weeks. By introducing standardized procedures and efficient use of an electronic ticketing system I was able to achieve a target turn around time of three days or less. My current focus has been on developing software tools for internal use including a backup and system replication tool and a number of  libraries and tools for interacting with the ticket system's API. In addition I did extensive organizational development outside my department and assisted in systems administration where needed. 
 
 **April 2010&ndash;November 2010:
@@ -54,5 +54,5 @@ IT Co-ordinator**, River Ocean Research & Education.
 
 ### Interests
 
-In addition to volunteering in a number of roles including IT consultant, when I am not being a parent, I currently spend some of my free time writing code based art projects.
+In addition to volunteering in a number of roles including IT consultant, when I am not being a parent, I currently spend some of my free time writing code based art projects and contributing to open source projects.
 
