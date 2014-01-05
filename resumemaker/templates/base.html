@@ -3,7 +3,7 @@
 <head>
 <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
 <title>paulmunday.net::{% if title -%}{{title}}{% endif %}</title>
-<link href="/static/style.css" rel="stylesheet" type="text/css"  />
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"  />
 {% if css %}
     {% for file in css %}
         <link href="{{file}}" rel="stylesheet" type="text/css"  />
@@ -18,10 +18,26 @@
 <body>
     <div id="nav">
        <ul id="nav">
+       <!--
             <li><a href="/">home</a></li>
-            <li><a href="/about">about</a></li>
+            <li><a href="{{ url_for('staticpage', page='about') }} ">about</a></li>
             <li><a href="/colophon">colophon</a></li>
             <li><a href="/source">view the source code</a></li>
+        -->
+        {% for item in navigation.navigation.itervalues() %}
+            <li><a href="
+            {% if item.url %}{{item.url}}
+            {% elif item.urlfor %}
+                {% if item.urlfor == "source" %}
+                    {{ url_for(item.urlfor, page=navigation.page) }}
+                {% else %}
+                    {{ url_for(item.urlfor) }}
+                {% endif %}
+            {% else %}
+                {{ url_for('staticpage', page=item.base) }}
+            {% endif %}
+            ">{{item.text}}</a></li>
+            {% endfor %}
         </ul>
     </div>
     <div>
