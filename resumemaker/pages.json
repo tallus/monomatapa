@@ -4,10 +4,13 @@
     "title": "home", 
     "heading": "Paul Munday",
     "trusted": true
-},
+    },
  "about": {
      "title": "about me",
      "heading": "About Me",
      "trusted": true
-     }
+     },
+ "code": {
+     "trusted": true
+    }
 }

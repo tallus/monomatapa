@@ -82,7 +82,8 @@ class StaticPage:
     
     def generate_page(self):
         """return a page generator function for static pages 
-        written in Markdown under src/."""
+        written in Markdown unde
+        r src/."""
         def page_generator(heading=self.heading, title=self.title):
             src = render_markdown(src_file(self.src, 'src'), self.trusted)
             if not src:
