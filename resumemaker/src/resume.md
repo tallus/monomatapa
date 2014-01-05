@@ -1,6 +1,6 @@
 ## Key Skills
 **Programming**
-    *Core competencies:* Python, Bash/Shell Scripting, Git, Test driven development.  *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound & HTML/CSS. 
+    *Core competencies:* Python, Bash/Shell Scripting, Git, Test driven development.  *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound  and HTML/CSS. 
 
 **Linux/Unix Systems and Network Administration**
     High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric. Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and Internet technologies.
@@ -29,7 +29,7 @@ Systems Administrator**, 2Bet Ltd. Responsible for all systems and network admin
 IT Development Worker**, BPEC. Set up a low cost public Internet access facility for an educational and environmental charity. 
 
 **September 1996&ndash;May 1998
-IT Co-ordinator**, River Ocean Research & Education.   
+IT Co-ordinator**, River Ocean Research and Education.   
 
 ### Other Skills
 

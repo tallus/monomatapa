@@ -1,0 +1,19 @@
+{
+    "nav_order": ["index", "github", "colophon", "source"],
+    "nav_elements": {
+        "index": {
+            "link_text": "home",
+            "urlfor": "index"
+            },
+        "about": {
+            "link text": "about me" 
+            },
+        "github": {
+            "url": "https://github.com/tallus"
+            },
+        "source": {
+            "link_text": "view the source",
+            "urlfor": "source"
+            }
+    }
+}

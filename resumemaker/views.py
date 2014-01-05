@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-from flask import render_template, flash, redirect, abort, Markup, escape
+from flask import render_template, abort, Markup, escape, request 
 from pygments import highlight
 from pygments.lexers import PythonLexer
-from pygments.lexers import RstLexer
+from pygments.lexers import TextLexer
 from pygments.formatters import HtmlFormatter
 from pygments.styles import get_style_by_name
 
@@ -12,103 +12,94 @@ from os import getcwd
 
 from collections import OrderedDict
 
+import json
+
 import markdown
 
 from resumemaker import app
 
-# N.B. static pages do not need to have attributes  defined here:
-# it is sufficient to have a page.md in src for each /page
-# to be served.
-pages = {
-    'index' : {
-        'src' : 'resume.md',
-        'title' : 'home', 
-        'heading' : 'Paul Munday',
-        'trusted' : True,
-        },
-     'about' : {
-         'title' : 'about me',
-         'heading' : 'About Me',
-         'trusted' : True,
-         },
-    }
+
+# 
+def get_page_attributes():
+    """Returns dictionary of page_attributes.
+    Defines additional static page attributes loaded from json file.
+    N.B. static pages do not need to have attributes defined there,
+    it is sufficient to have a page.md in src for each /page 
+    possible values are src (name of markdown file to be rendered)
+    heading, title, and trusted (i.e. allow embeded html in markdown)"""
+    with open(src_file('pages.json'), 'r') as pagesfile:
+        page_attributes = json.load(pagesfile)
+    return page_attributes
 
 # Navigation
-
-# if a page is to show up in the top navigation
-# there must be an entry present with the name attribute set.
-# name will be used to set the link text, unless link_text is also present
-# url and urlfor are optional, however if ommited the url wil be generated
-# in the navigation by  url_for('staticpage', page=[key])
-# (equivalent to  @app.route"/page"; def page())
-# which may not be correct. If a url is supplied  it will be used 
-# otherwise if urlfor is supplied it the url will be
-# generated with url_for(urlfor). url takes precendence so it makes
-# no sense to supply both.
-
-top_navigation = OrderedDict({
-    'index' : {
-        'name' : 'home',
-        'urlfor' : 'index',
-        },
-    'about' : {
-        # name : 'about'
-        'link text' : 'about me' 
-        },
-    'github' : {
-        'name' : 'github',
-        'url' : 'https://github.com/tallus',
-        },
-    'colophon' : {
-        'name' : 'colophon',
-        },
-    'source'  : {
-        'name' : 'source',
-        'link_text' : 'view the source',
-        'urlfor' : 'source'
-        }
-    })
-
-
-def base_navigation():
-    """Generates base  info navigation from navigation OrderedDict"""
+def top_navigation(page):
+    """Generates navigation as an OrderedDict from navigation.json.
+    Navigation.json consists of a json array(list) "nav_order"
+    containing the names of the top navigation elements and 
+    a json object(dict) called "nav_elements"
+    if a page is to show up in the top navigation
+    there must be an entry present in nav_order but there need not
+    be one in nav_elements. However if there is the key must be the same. 
+    Possible values for nav_elements are link_text, url and urlfor
+    The name  from nav_order will be used to set the link text, 
+    unless link_text is present in nav_elements.
+    url and urlfor are optional, however if ommited the url wil be
+    generated in the navigation by  url_for('staticpage', page=[key])
+    equivalent to  @app.route"/page"; def page())
+    which may not be correct. If a url is supplied  it will be used 
+    otherwise if urlfor is supplied it the url will be
+    generated with url_for(urlfor). url takes precendence so it makes
+    no sense to supply both."""
+    with open(src_file('navigation.json'), 'r') as  navfile:
+        navigation = json.load(navfile)
     base_nav = OrderedDict({})
-    for key, value in top_navigation.iteritems():
+    for key in navigation["nav_order"]:
         nav = {}
-        if 'name' in value:
-            nav['base'] = key
-            if 'link_text' in value:
-                nav['text'] = value['link_text']
-            else:
-                nav['text'] = value['name']
-            if 'url' in value:
-                nav['url'] = value['url']
-            if 'urlfor' in value:
-                nav['urlfor'] = value['urlfor']
-            base_nav[key] = nav
-    return base_nav
-
-# this is static so generate once
-base_nav = base_navigation()
-
-def  navigation(page):
-    """Generates top navigation info."""
+        nav['base'] = key
+        nav['link_text'] = key
+        if key in navigation["nav_elements"]:
+            elements = navigation["nav_elements"][key]
+            nav.update(elements)
+        base_nav[key] = nav
     return {'navigation' :  base_nav, 'page' : page}
 
+# For static pages
+class StaticPage:
+    """Generates static pages as objects"""
+    def __init__(self, page):
+        """Define attributes for static pages (if present)"""
+        # set default attributes
+        self.page = page
+        attributes = {'src': page.rstrip('/') + '.md', 'name' : page,
+                'title' : None, 'heading' : None, 'trusted': False}
+        # update values if set
+        pages = get_page_attributes()
+        if page in pages:
+            attributes.update(pages[page])
+        # set attributes using indirection, sets self.src etc
+        for attribute, value in attributes.iteritems():
+            vars(self)[attribute] = value
+    
+    def generate_page(self):
+        """return a page generator function for static pages 
+        written in Markdown under src/."""
+        def page_generator(heading=self.heading, title=self.title):
+            src = render_markdown(src_file(self.src, 'src'), self.trusted)
+            if not src:
+                abort(404)
+            else:
+                if not heading:
+                    # src - extension capitalized
+                    heading = os.path.splitext(self.src)[0].capitalize()
+                if not title:
+                    title = heading.lower()
+                return render_template("static.html",
+                    title = title, heading = heading, 
+                    navigation =  top_navigation(self.page), 
+                    contents = Markup(src)),
+        return page_generator()
 
-def get_static_attributes(page):
-    """return attributes for static pages (if present)"""
-    srcfile = page.rstrip('/') + '.md'
-    attributes = {'src': srcfile,  'name' : page,
-            'title' : None, 'heading' : None, 'trusted': False}
-    if page in pages:
-        sp = pages[page]
-        for attribute in ['src', 'title' , 'heading', 'trusted']:
-            if attribute in sp:
-                attributes[attribute] = sp[attribute]
-    return attributes['src'], attributes['title'], attributes['heading'], attributes['trusted']
-
-
+# helper functions for static pages
 def src_file(name, directory=None):
     """return path to file in this app"""
     if not directory:
@@ -130,60 +121,62 @@ def render_markdown(file, trusted=False):
     except IOError:
            return None
 
-def static_page(srcfile, page, heading=None, title=None, trusted=False):
-    """return a page generator  function for static pages 
-    written in Markdown under src/. Takes the name of the markdown file,
-    the page name (equivalent = @app.route"/page"; def page())
-    its title and main heading"""
-    def page_generator(heading=heading, title=title):
-        src = render_markdown(src_file(srcfile, 'src'), trusted)
-        if not src:
-            abort(404)
-        else:
-            if not heading:
-                heading = os.path.splitext(srcfile)[0].capitalize()
-            if not title:
-                title = heading.lower()
-            return render_template("static.html",
-                title = title, heading = heading, 
-                navigation = navigation(page), 
-                contents = Markup(src)),
-    return page_generator()
+# Define routes
 
 @app.errorhandler(404)
 def page_not_found(e):
     """ provides basic 404 page"""
     return render_template('static.html', 
             title = "404::page not found", heading = "Page Not Found", 
-            navigation = navigation('404'),
+            navigation = top_navigation('404'),
             contents = Markup(
                 "This page in not there, try somewhere else.")), 404
 
 @app.route("/")
 def index():
     """provides index page"""
-    srcfile, title, heading, trusted = get_static_attributes('index')
-    return static_page(srcfile, 'index',  
-            title = title, heading = heading, trusted=trusted)
+    index = StaticPage('index')
+    return index.generate_page()
 
 @app.route("/<path:page>")
 def staticpage(page):
     """displays /page or /page/ as long as src/page.md exists.
     srcfile, title and heading may be set in the pages global 
     (ordered) dictionary but are not required"""
-    srcfile, name, title, heading, trusted = get_static_attributes(page)
-    return static_page(srcfile, page,
-            title = title, heading = heading, trusted=trusted)
+    static_page = StaticPage(page)
+    return static_page.generate_page()
 
 @app.route("/source")
 def source():
-    """view source files used to render a page"""
+    """Display source files used to render a page"""
+       # render views.py
     with open(src_file('views.py'), 'r') as f:
         src = f.read()
     code = highlight(src, PythonLexer(), HtmlFormatter())
+    contents = "<h2>views.py</h2>\n%s" % code
+    # render markdown
+    page = request.args.get('page')
+    pagename = page + '.md'
+    pages = get_page_attributes()
+    if page in pages and 'src' in pages[page]:
+        pagename = pages[page]['src']
+    page = request.args.get('page')
+    if os.path.exists(src_file(pagename, 'src')):
+        page = src_file(pagename, 'src')
+    elif os.path.exists(src_file(pagename)):
+        page = src_file(pagename)
+    else:
+        print "no page:" + page
+        page = None
+    if page:
+        with open(page, 'r') as f:
+            markdown = f.read()
+            contents  += "<h2>%s</h2>" % pagename
+            contents += highlight(markdown, TextLexer(), HtmlFormatter())
+    # format contents
     css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
     return render_template("static.html", internal_css =  css,
         title = "view the source code", heading = "View the Source Code",
-        navigation = navigation('source'),
-        contents = Markup(code))
-
+        navigation = top_navigation('source'),
+        contents = Markup(contents))
+    

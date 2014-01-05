@@ -18,26 +18,20 @@
 <body>
     <div id="nav">
        <ul id="nav">
-       <!--
-            <li><a href="/">home</a></li>
-            <li><a href="{{ url_for('staticpage', page='about') }} ">about</a></li>
-            <li><a href="/colophon">colophon</a></li>
-            <li><a href="/source">view the source code</a></li>
-        -->
-        {% for item in navigation.navigation.itervalues() %}
+        {%- for item in navigation.navigation.itervalues() -%}
             <li><a href="
-            {% if item.url %}{{item.url}}
-            {% elif item.urlfor %}
-                {% if item.urlfor == "source" %}
+            {%- if item.url -%}{{item.url}}
+            {%- elif item.urlfor -%}
+                {%- if item.urlfor == "source" -%}
                     {{ url_for(item.urlfor, page=navigation.page) }}
-                {% else %}
+                {%- else -%}
                     {{ url_for(item.urlfor) }}
-                {% endif %}
-            {% else %}
+                {%- endif -%}
+            {%- else -%}
                 {{ url_for('staticpage', page=item.base) }}
-            {% endif %}
-            ">{{item.text}}</a></li>
-            {% endfor %}
+            {%- endif -%}
+            ">{{item.link_text}}</a></li>
+            {% endfor -%}
         </ul>
     </div>
     <div>
@@ -54,7 +48,5 @@
     <div id = "content">
         {% block content %}{% endblock %}
     </div>
-    <dl>
-</dl>
 </body>
 </html>
