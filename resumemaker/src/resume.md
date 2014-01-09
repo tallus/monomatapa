@@ -5,6 +5,13 @@
 **Linux/Unix Systems and Network Administration**
     High Availability Systems, Apache, Mysql and other DB, Email systems e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric. Client facing tech support. Systems design. As a systems administrator my primary focus has been on open source and Internet technologies.
  
+### Other Skills
+
+**Teaching/Training**
+    A certified and experienced tutor/trainer, I have devised and taught a number of IT based courses and workshops including sound editing and radio production, web design and introductory computing. 
+
+**Management**
+    I have extensive experience in the non-profit sector, managing paid and volunteer staff. This has given me experience and knowledge of the particular challenges faced in this sector including  training, recruiting and managing volunteers. It has also given me a wider set of skills in leadership, facilitation and community building.
 
 ## Past Work
 
@@ -29,15 +36,9 @@ Systems Administrator**, 2Bet Ltd. Responsible for all systems and network admin
 IT Development Worker**, BPEC. Set up a low cost public Internet access facility for an educational and environmental charity. 
 
 **September 1996&ndash;May 1998
-IT Co-ordinator**, River Ocean Research and Education.   
+IT Co-ordinator**, River Ocean Research and Education.
 
-### Other Skills
-
-**Teaching/Training**
-    A certified and experienced tutor/trainer, I have devised and taught a number of IT based courses and workshops including sound editing and radio production, web design and introductory computing. 
-
-**Management**
-    I have extensive experience in the non-profit sector, managing paid and volunteer staff. This has given me experience and knowledge of the particular challenges faced in this sector including  training, recruiting and managing volunteers. It has also given me a wider set of skills in leadership, facilitation and community building.
+## Community Service and Artistic Practice
 
 **Performance**
     I trained for three years in Dance and Performance, and have performed at a semi-professional level.
