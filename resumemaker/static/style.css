@@ -36,6 +36,7 @@ ul#nav {
     padding: 0;
     list-style-type: none;
     font-family: 'EB Garamond', Garamond, serif;
+    font-size: 1.2em;
 }
 
 ul#nav li {
@@ -47,5 +48,5 @@ ul#nav a {
     float: left;
     padding: 0 1em;
     text-decoration: none;
-    color: #333;
+    color: #999;
 }
