@@ -20,7 +20,7 @@ class ResumeTestCase(unittest.TestCase):
         os.unlink(self.tmpfile.name)
    
     # test StaticPage class
-    # generate_page is not tested here as it' reliant on 
+    # generate_page is not tested here as it is reliant on 
     # flask's context, testing is implicit in test_static_page etc
 
     def test_StaticPage(self):
