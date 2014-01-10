@@ -20,8 +20,6 @@ import subprocess
 
 from resumemaker import app
 
-
-# 
 def get_page_attributes(jsonfile):
     """Returns dictionary of page_attributes.
     Defines additional static page attributes loaded from json file.
@@ -71,65 +69,69 @@ class StaticPage:
     def __init__(self, page):
         """Define attributes for static pages (if present)"""
         # set default attributes
-        self.page = page
+        self.page = page.rstrip('/')
         title = page.lower()
         heading = page.capitalize()
-        attributes = {'src': page.rstrip('/') + '.md', 'name' : page,
-                'title' : title, 'heading' : heading, 'trusted': False}
-        # update values if set
+        attributes = {'name' : page, 'title' : title, 
+                'heading' : heading, 'trusted': False}
+        # overide default attributes if set in pages.json
         pages = get_page_attributes('pages.json')
         if page in pages:
             attributes.update(pages[page])
         # set attributes using indirection, sets self.src etc
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
-    
+
     def generate_page(self):
         """return a page generator function for static pages 
         written in Markdown under src/."""
         def page_generator(heading=self.heading, title=self.title):
-            src = render_markdown(src_file(self.src, 'src'), self.trusted)
-            if not src:
+            src = get_page_src(self.page, 'src', 'md') 
+            if src is None:
                 abort(404)
             else:
+                contents = render_markdown(src, self.trusted)
                 return render_template("static.html",
                     title = title, heading = heading, 
                     navigation =  top_navigation(self.page), 
-                    contents = Markup(src)),
+                    contents = Markup(contents)),
         return page_generator()
 
 # helper functions for static pages
 def src_file(name, directory=None):
-    """return path to file in this app"""
+    """return potential path to file in this app"""
     if not directory:
         return os.path.join( 'resumemaker', name)
     else:
         return os.path.join('resumemaker', directory, name)
- 
-def src_exists(page):
+
+
+def get_extension(ext):
+    '''constructs extension, adding or stripping leading . as needed.
+    Return null string for None'''
+    if ext is None:
+        return ''
+    elif ext[0] == '.':
+        return ext
+    else:
+        return '.%s' % ext
+
+
+def get_page_src(page, directory=None, ext=None):
+    """"return path of file (used to generate page) if it exists,
+    or return none.It will optionally add an extension, to allow 
+    specifiying pages by route."""
+    # is it stored in a config
     pages = get_page_attributes('pages.json')
     if page in pages and 'src' in pages[page]:
         pagename = pages[page]['src']
     else:
-        pagename = page + '.md'
-    if os.path.exists(src_file(pagename ,'src')):
-        return src_file(pagename ,'src')
+        pagename = page + get_extension(ext)
+    if os.path.exists(src_file(pagename , directory)):
+        return src_file(pagename, directory)
     else:
         return None
-
-def get_page_src(page):
-    special_pages = ['source', 'unit-tests', '404']
-    # otherwise it's a static page and markdown source should exist
-    if not page in special_pages:
-        pagesrc = src_exists(page)
-        if not pagesrc:
-            # abort if trying to view  non-existant source
-            abort(404)
-    else:
-        pagesrc = None
-    return pagesrc
-
-   
+  
 def render_markdown(file, trusted=False):
     """Return markdown file rendered as html. Defaults to untrusted:
         html characters (and character entities) are escaped 
@@ -162,9 +164,11 @@ def index():
     index = StaticPage('index')
     return index.generate_page()
 
+# default route is it doe not exist elsewhere
 @app.route("/<path:page>")
 def staticpage(page):
-    """displays /page or /page/ as long as src/page.md exists.
+    """ display a static page rendered from markdown in src
+    i.e. displays /page or /page/ as long as src/page.md exists.
     srcfile, title and heading may be set in the pages global 
     (ordered) dictionary but are not required"""
     static_page = StaticPage(page)
@@ -176,7 +180,10 @@ def source():
     page = request.args.get('page')
     # get source for markdown if any. 404's for non-existant markdown
     # unless special page eg source
-    pagesrc = get_page_src(page)
+    pagesrc = get_page_src(page, 'src', 'md')
+    special_pages = ['source', 'unit-tests', '404']
+    if not page in special_pages and pagesrc is None:
+        abort(404)
     # render the source for unit tests if appropriate, otherwise views.py
     if page == 'unit-tests':
         srcfile = 'tests.py'
@@ -200,7 +207,7 @@ def source():
         title = "view the source code", heading = "View the Source Code",
         navigation = top_navigation('source'),
         contents = Markup(contents))
-    
+
 @app.route("/unit-tests")
 def unit_tests():
     """display results of unit tests"""
@@ -209,15 +216,22 @@ def unit_tests():
             stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     output = capture.communicate()
     results = output[1]
-    contents = '<div class="output">'
+    contents = '<p><a href="/unit-tests">Run unit tests</a></p>'
+    contents += '<div class="output">'
     if 'OK' in results:
         contents += "<strong>TESTS PASSED</strong>"
     else:
-        
         contents += "<strong>TESTS FAILING</strong>"
     contents += '<pre>%s</pre>'  % results
     contents += '</div>'
-    return render_template("static.html", heading = "Test Results", 
+    # render test.py 
+    with open('tests.py', 'r') as f:
+        src = f.read()
+    code = highlight(src, PythonLexer(), HtmlFormatter())
+    contents += "<h2>%s</h2>\n%s" % ('tests.py', code)
+    css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
+    return render_template("static.html", internal_css =  css,
+        heading = "Test Results", 
         navigation = top_navigation('unit-tests'),
         contents = Markup(contents))
 
