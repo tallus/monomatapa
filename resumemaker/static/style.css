@@ -6,6 +6,11 @@ div#content {
     margin: 2% 2%;
 }
 
+div.output{
+    padding: 2%;
+    background-color: #EEE;
+}
+
 h1 {
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 3em;

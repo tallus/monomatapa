@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from flask import render_template, abort, Markup, escape, request 
+
 from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.lexers import TextLexer
@@ -13,21 +14,22 @@ from os import getcwd
 from collections import OrderedDict
 
 import json
-
 import markdown
+import sys
+import subprocess
 
 from resumemaker import app
 
 
 # 
-def get_page_attributes():
+def get_page_attributes(jsonfile):
     """Returns dictionary of page_attributes.
     Defines additional static page attributes loaded from json file.
     N.B. static pages do not need to have attributes defined there,
     it is sufficient to have a page.md in src for each /page 
     possible values are src (name of markdown file to be rendered)
     heading, title, and trusted (i.e. allow embeded html in markdown)"""
-    with open(src_file('pages.json'), 'r') as pagesfile:
+    with open(src_file(jsonfile), 'r') as pagesfile:
         page_attributes = json.load(pagesfile)
     return page_attributes
 
@@ -70,10 +72,12 @@ class StaticPage:
         """Define attributes for static pages (if present)"""
         # set default attributes
         self.page = page
+        title = page.lower()
+        heading = page.capitalize()
         attributes = {'src': page.rstrip('/') + '.md', 'name' : page,
-                'title' : None, 'heading' : None, 'trusted': False}
+                'title' : title, 'heading' : heading, 'trusted': False}
         # update values if set
-        pages = get_page_attributes()
+        pages = get_page_attributes('pages.json')
         if page in pages:
             attributes.update(pages[page])
         # set attributes using indirection, sets self.src etc
@@ -82,18 +86,12 @@ class StaticPage:
     
     def generate_page(self):
         """return a page generator function for static pages 
-        written in Markdown unde
-        r src/."""
+        written in Markdown under src/."""
         def page_generator(heading=self.heading, title=self.title):
             src = render_markdown(src_file(self.src, 'src'), self.trusted)
             if not src:
                 abort(404)
             else:
-                if not heading:
-                    # src - extension capitalized
-                    heading = os.path.splitext(self.src)[0].capitalize()
-                if not title:
-                    title = heading.lower()
                 return render_template("static.html",
                     title = title, heading = heading, 
                     navigation =  top_navigation(self.page), 
@@ -107,7 +105,31 @@ def src_file(name, directory=None):
         return os.path.join( 'resumemaker', name)
     else:
         return os.path.join('resumemaker', directory, name)
-    
+ 
+def src_exists(page):
+    pages = get_page_attributes('pages.json')
+    if page in pages and 'src' in pages[page]:
+        pagename = pages[page]['src']
+    else:
+        pagename = page + '.md'
+    if os.path.exists(src_file(pagename ,'src')):
+        return src_file(pagename ,'src')
+    else:
+        return None
+
+def get_page_src(page):
+    special_pages = ['source', 'unit-tests', '404']
+    # otherwise it's a static page and markdown source should exist
+    if not page in special_pages:
+        pagesrc = src_exists(page)
+        if not pagesrc:
+            # abort if trying to view  non-existant source
+            abort(404)
+    else:
+        pagesrc = None
+    return pagesrc
+
+   
 def render_markdown(file, trusted=False):
     """Return markdown file rendered as html. Defaults to untrusted:
         html characters (and character entities) are escaped 
@@ -121,6 +143,7 @@ def render_markdown(file, trusted=False):
                 return markdown.markdown(escape(f.read()))
     except IOError:
            return None
+
 
 # Define routes
 
@@ -150,29 +173,26 @@ def staticpage(page):
 @app.route("/source")
 def source():
     """Display source files used to render a page"""
-       # render views.py
-    with open(src_file('views.py'), 'r') as f:
+    page = request.args.get('page')
+    # get source for markdown if any. 404's for non-existant markdown
+    # unless special page eg source
+    pagesrc = get_page_src(page)
+    # render the source for unit tests if appropriate, otherwise views.py
+    if page == 'unit-tests':
+        srcfile = 'tests.py'
+    else:
+        srcfile = src_file('views.py')
+    # render views.py etc
+    contents = '<p><a href="/unit-tests">Run unit tests</a></p>'
+    with open(srcfile, 'r') as f:
         src = f.read()
     code = highlight(src, PythonLexer(), HtmlFormatter())
-    contents = "<h2>views.py</h2>\n%s" % code
-    # render markdown
-    page = request.args.get('page')
-    pagename = page + '.md'
-    pages = get_page_attributes()
-    if page in pages and 'src' in pages[page]:
-        pagename = pages[page]['src']
-    page = request.args.get('page')
-    if os.path.exists(src_file(pagename, 'src')):
-        page = src_file(pagename, 'src')
-    elif os.path.exists(src_file(pagename)):
-        page = src_file(pagename)
-    else:
-        print "no page:" + page
-        page = None
-    if page:
-        with open(page, 'r') as f:
+    contents += "<h2>%s</h2>\n%s" % (os.path.basename(srcfile), code)
+    # render markdown if present
+    if pagesrc:
+        with open(pagesrc, 'r') as f:
             markdown = f.read()
-            contents  += "<h2>%s</h2>" % pagename
+            contents  += "<h2>%s</h2>" % os.path.basename(pagesrc)
             contents += highlight(markdown, TextLexer(), HtmlFormatter())
     # format contents
     css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
@@ -181,3 +201,23 @@ def source():
         navigation = top_navigation('source'),
         contents = Markup(contents))
     
+@app.route("/unit-tests")
+def unit_tests():
+    """display results of unit tests"""
+    # exec unit tests in subprocess, capturing stderr
+    capture = subprocess.Popen(["python", "tests.py"], 
+            stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+    output = capture.communicate()
+    results = output[1]
+    contents = '<div class="output">'
+    if 'OK' in results:
+        contents += "<strong>TESTS PASSED</strong>"
+    else:
+        
+        contents += "<strong>TESTS FAILING</strong>"
+    contents += '<pre>%s</pre>'  % results
+    contents += '</div>'
+    return render_template("static.html", heading = "Test Results", 
+        navigation = top_navigation('unit-tests'),
+        contents = Markup(contents))
+
