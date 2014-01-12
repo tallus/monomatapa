@@ -76,20 +76,25 @@ def top_navigation(page):
 class Page:
     """Generates  pages as objects"""
     def __init__(self, page, title=None, heading=None):
-        """Define attributes for static pages (if present)"""
+        """Define attributes for  pages (if present).
+        Sets self.name, self.title, self.heading, self.trusted
+        This is done through indirection so we can update the defaults 
+        (defined  in the 'attributes' dictionary  with values from pages.json 
+        easily without lots of if else statements."""
         # set default attributes
         self.page = page.rstrip('/')
         if not title:
             title = page.lower()
         if not heading:
             heading = page.capitalize()
+        # will become self.name, self.title, self.heading, self.trusted
         attributes = {'name' : self.page, 'title' : title, 
                 'heading' : heading, 'trusted': False}
-        # overide default attributes if set in pages.json
+        # overide attributes if set in pages.json
         pages = get_page_attributes('pages.json')
         if page in pages:
             attributes.update(pages[page])
-        # set attributes using indirection, sets self.src etc
+        # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
 
