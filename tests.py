@@ -20,12 +20,12 @@ class ResumeTestCase(unittest.TestCase):
     def tearDown(self):
         os.unlink(self.tmpfile.name)
    
-    # Test StaticPage class
+    # Test Page class
     # generate_page is not tested here as it is reliant on 
-    # flask's context, testing is implicit in test_static_page etc
+    # flask's context, testing is implicit, test_static_page etc)
 
-    def test_StaticPage(self):
-        staticpage = resumemaker.views.StaticPage(self.route)
+    def test_Page(self):
+        staticpage = resumemaker.views.Page(self.route)
         self.assertEquals(staticpage.name, self.route)
         self.assertEquals(staticpage.title, self.route.lower())
         self.assertEquals(staticpage.heading, self.route.capitalize())
@@ -86,22 +86,26 @@ class ResumeTestCase(unittest.TestCase):
 
     def test_render_markdown(self):
         markdown = resumemaker.views.render_markdown(self.tmpfile.name)
-        assert 'test' in markdown
+        self.assertIn( 'test', markdown)
 
     def test_render_markdown_untrusted(self):
         markdown = resumemaker.views.render_markdown(self.tmpfile.name)
-        assert '&aleph;' not in markdown
+        self.assertNotIn( '&aleph;', markdown)
     
     def test_render_markdown_trusted(self):
         markdown = resumemaker.views.render_markdown(self.tmpfile.name,
                 trusted=True)
-        assert '&aleph;' in markdown
+        self.assertIn('&aleph;', markdown)
    
     def test_pygments_renderer(self):
         results = resumemaker.views.render_pygments(self.tmpfile.name,
                 'markdown')
-        assert '<pre>' in results
-        assert 'test' in results
+        self.assertIn('<pre>', results)
+        self.assertIn('test', results)
+
+    def test_get_pygments_css(self):
+        css = resumemaker.views.get_pygments_css()
+        self.assertIn('.highlight', css)
 
     def test_heading(self):
         expected = '\n<h1>test</h1>\n'
@@ -116,31 +120,31 @@ class ResumeTestCase(unittest.TestCase):
     def test_index(self):
         index_page = self.app.get('/')
         # makes assumptions about templating/content
-        assert 'Paul Munday' in index_page.data
+        self.assertIn('Paul Munday', index_page.data)
         # will fail if md not rendered 
-        assert 'None' not in index_page.data
+        self.assertNotIn('None', index_page.data)
         title = '<title>paulmunday.net::%s</title>' % 'home'
-        assert  title in index_page.data
+        self.assertIn( title, index_page.data)
 
 
     def test_static_page(self):
         static_page = self.app.get('/' +  self.route)
         # tests for content
-        assert 'test' in static_page.data
+        self.assertIn('test', static_page.data)
         # will fail if md not rendered 
-        assert 'None' not in static_page.data
+        self.assertNotIn('None', static_page.data)
 
     def test_static_page_heading(self):
         static_page = self.app.get('/' +  self.route)
         # note dependent of static page template
         heading = '<h1>%s</h1>' % self.route.capitalize()
-        assert  heading in static_page.data
+        self.assertIn( heading, static_page.data)
 
     def test_static_page_title(self):
         # note dependent of static page template
         static_page = self.app.get('/' +  self.route)
         title = '<title>paulmunday.net::%s</title>' % self.route.lower()
-        assert  title in static_page.data
+        self.assertIn( title, static_page.data)
 
 
     def test_static_page_404(self):
@@ -153,7 +157,7 @@ class ResumeTestCase(unittest.TestCase):
     
     def test_source_page(self):
         source_page = self.app.get('/source?page=%s' % self.route)
-        assert self.filename in source_page.data
+        self.assertIn(self.filename, source_page.data)
     
     def test_source_page_200(self):
         static_page = self.app.get('/source?page=%s' % self.route)
@@ -167,23 +171,23 @@ class ResumeTestCase(unittest.TestCase):
         source_page = self.app.get('/source?page=source')
         # N.B. this makes assumptions about page layout
         # i.e. page names rendered as h2 heading
-        assert '<h2>views.py' in source_page.data
-        assert '<h2>tests.py' not in source_page.data
+        self.assertIn('<h2>views.py', source_page.data)
+        self.assertNotIn('<h2>tests.py', source_page.data)
     
     def test_source_page_for_rendered_source(self):
         source_page = self.app.get('/source?page=source')
-        assert 'StaticPage' in source_page.data
+        self.assertIn('Page', source_page.data)
 
     def test_source_page_for_unittests(self):
         source_page = self.app.get('/source?page=unit-tests')
         # N.B. this makes assumptions about page layout
         # i.e. page names rendered as h2 heading
-        assert '<h2>tests.py' in source_page.data
+        self.assertIn('<h2>tests.py', source_page.data)
     
     def test_source_page_for_rendered_unittests(self):
         source_page = self.app.get('/source?page=unit-tests')
         # always true if this test is rendered
-        assert 'def test_source_page_for_unittests' in source_page.data
+        self.assertIn('def test_source_page_for_unittests', source_page.data)
 
 if __name__ == '__main__':
     unittest.main()

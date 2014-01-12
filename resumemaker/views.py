@@ -75,7 +75,7 @@ def top_navigation(page):
 # For pages
 class Page:
     """Generates  pages as objects"""
-    def __init__(self, page, title=None, heading=None, trusted=False):
+    def __init__(self, page, title=None, heading=None):
         """Define attributes for static pages (if present)"""
         # set default attributes
         self.page = page.rstrip('/')
@@ -84,7 +84,7 @@ class Page:
         if not heading:
             heading = page.capitalize()
         attributes = {'name' : self.page, 'title' : title, 
-                'heading' : heading, 'trusted': trusted}
+                'heading' : heading, 'trusted': False}
         # overide default attributes if set in pages.json
         pages = get_page_attributes('pages.json')
         if page in pages:
@@ -101,16 +101,17 @@ class Page:
         else:
             return render_markdown(src, self.trusted)
 
-    def generate_page(self, contents=None):
+    def generate_page(self, contents=None, internal_css=None):
         """return a page generator function.
         For static pages written in Markdown under src/.
         contents are automatically rendered"""
         if not contents:
             contents = self._get_markdown()
         def page_generator(contents=contents, heading=self.heading, 
-                title=self.title):
+                title=self.title, internal_css = internal_css):
             return render_template("static.html",
                 title = title, heading = heading, 
+                internal_css = internal_css,
                 navigation =  top_navigation(self.page), 
                 contents = Markup(contents)),
         return page_generator()
@@ -176,6 +177,13 @@ def render_pygments(srcfile, lexer_type):
             contents = highlight(src, TextLexer(), HtmlFormatter())
     return contents
 
+def get_pygments_css(style=None):
+    """returns css for pygments, use as internal_css"""
+    if style is None:
+        style = 'friendly'
+    return HtmlFormatter(style=style).get_style_defs('.highlight')
+
+
 def heading(text, level):
     """return as html heading at h[level]"""
     hl = 'h%s' % str(level)
@@ -211,6 +219,8 @@ def staticpage(page):
 @app.route("/source")
 def source():
     """Display source files used to render a page"""
+    source_page = Page('source', title = "view the source code", 
+            heading = "View the Source Code")
     page = request.args.get('page')
     # get source for markdown if any. 404's for non-existant markdown
     # unless special page eg source
@@ -231,15 +241,13 @@ def source():
         contents += heading(os.path.basename(pagesrc), 2)
         contents += render_pygments(pagesrc, 'markdown')
     # format contents
-    css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
-    return render_template("static.html", internal_css =  css,
-        title = "view the source code", heading = "View the Source Code",
-        navigation = top_navigation('source'),
-        contents = Markup(contents))
+    css = get_pygments_css()
+    return source_page.generate_page(contents, internal_css = css)
 
 @app.route("/unit-tests")
 def unit_tests():
     """display results of unit tests"""
+    unit_tests = Page('unit-tests', heading = "Test Results")
     # exec unit tests in subprocess, capturing stderr
     capture = subprocess.Popen(["python", "tests.py"], 
             stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -248,17 +256,14 @@ def unit_tests():
     contents = '''<p><a href="/unit-tests">Run unit tests</a></p>
     <div class="output">\n'''
     if 'OK' in results:
-        contents += "<strong>TESTS PASSED</strong>"
+        result = "TESTS PASSED"
     else:
-        contents += "<strong>TESTS FAILING</strong>"
-    contents += '\n<pre>%s</pre>\n'  % results
-    contents += '</div>'
+        result = "TESTS FAILING"
+    contents += ("<strong>%s</strong>\n<pre>%s</pre>\n</div>\n"
+            % (result, results))
     # render test.py 
     contents += heading('tests.py', 2)
     contents += render_pygments('tests.py', 'python')
-    css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
-    return render_template("static.html", internal_css =  css,
-        heading = "Test Results", 
-        navigation = top_navigation('unit-tests'),
-        contents = Markup(contents))
+    css = get_pygments_css()
+    return unit_tests.generate_page(contents, internal_css = css)
 
