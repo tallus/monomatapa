@@ -6,16 +6,13 @@ from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.lexers import TextLexer
 from pygments.formatters import HtmlFormatter
-from pygments.styles import get_style_by_name
 
 import os.path
-from os import getcwd
 
 from collections import OrderedDict
 
 import json
 import markdown
-import sys
 import subprocess
 
 from resumemaker import app
@@ -30,6 +27,15 @@ def get_page_attributes(jsonfile):
     with open(src_file(jsonfile), 'r') as pagesfile:
         page_attributes = json.load(pagesfile)
     return page_attributes
+
+def get_page_attribute(attr_src, page, attribute):
+    """returns attribute of page if it exists, else None.
+    attr_src = dictionary(from get_page_attributes)"""
+    if page in attr_src and attribute in attr_src[page]:
+        return attr_src[page][attribute]
+    else:
+        return None
+
 
 # Navigation
 def top_navigation(page):
@@ -63,17 +69,22 @@ def top_navigation(page):
         base_nav[key] = nav
     return {'navigation' :  base_nav, 'page' : page}
 
-# For static pages
-class StaticPage:
-    """Generates static pages as objects"""
-    def __init__(self, page):
+
+
+
+# For pages
+class Page:
+    """Generates  pages as objects"""
+    def __init__(self, page, title=None, heading=None, trusted=False):
         """Define attributes for static pages (if present)"""
         # set default attributes
         self.page = page.rstrip('/')
-        title = page.lower()
-        heading = page.capitalize()
-        attributes = {'name' : page, 'title' : title, 
-                'heading' : heading, 'trusted': False}
+        if not title:
+            title = page.lower()
+        if not heading:
+            heading = page.capitalize()
+        attributes = {'name' : self.page, 'title' : title, 
+                'heading' : heading, 'trusted': trusted}
         # overide default attributes if set in pages.json
         pages = get_page_attributes('pages.json')
         if page in pages:
@@ -82,19 +93,26 @@ class StaticPage:
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
 
-    def generate_page(self):
-        """return a page generator function for static pages 
-        written in Markdown under src/."""
-        def page_generator(heading=self.heading, title=self.title):
-            src = get_page_src(self.page, 'src', 'md') 
-            if src is None:
-                abort(404)
-            else:
-                contents = render_markdown(src, self.trusted)
-                return render_template("static.html",
-                    title = title, heading = heading, 
-                    navigation =  top_navigation(self.page), 
-                    contents = Markup(contents)),
+    def _get_markdown(self):
+        """returns rendered markdown or 404 if source does not exist"""
+        src = get_page_src(self.page, 'src', 'md') 
+        if src is None:
+            abort(404)
+        else:
+            return render_markdown(src, self.trusted)
+
+    def generate_page(self, contents=None):
+        """return a page generator function.
+        For static pages written in Markdown under src/.
+        contents are automatically rendered"""
+        if not contents:
+            contents = self._get_markdown()
+        def page_generator(contents=contents, heading=self.heading, 
+                title=self.title):
+            return render_template("static.html",
+                title = title, heading = heading, 
+                navigation =  top_navigation(self.page), 
+                contents = Markup(contents)),
         return page_generator()
 
 # helper functions for static pages
@@ -123,29 +141,45 @@ def get_page_src(page, directory=None, ext=None):
     specifiying pages by route."""
     # is it stored in a config
     pages = get_page_attributes('pages.json')
-    if page in pages and 'src' in pages[page]:
-        pagename = pages[page]['src']
-    else:
+    pagename = get_page_attribute(pages, page, 'src')
+    if not pagename:
         pagename = page + get_extension(ext)
     if os.path.exists(src_file(pagename , directory)):
         return src_file(pagename, directory)
     else:
         return None
   
-def render_markdown(file, trusted=False):
+def render_markdown(srcfile, trusted=False):
     """Return markdown file rendered as html. Defaults to untrusted:
         html characters (and character entities) are escaped 
         so will not be rendered. This departs from markdown spec 
         which allows embedded html."""
     try:
-        with open(file, 'r') as f:
+        with open(srcfile, 'r') as f:
             if trusted == True:
                 return markdown.markdown(f.read())
             else:
                 return markdown.markdown(escape(f.read()))
     except IOError:
-           return None
+        return None
 
+def render_pygments(srcfile, lexer_type):
+    """returns src(file) marked up with pygments"""
+    if lexer_type == 'python':
+        with open(srcfile, 'r') as f:
+            src = f.read()
+            contents = highlight(src, PythonLexer(), HtmlFormatter())
+    # default to TextLexer for everything else
+    else:
+        with open(srcfile, 'r') as f:
+            src = f.read()
+            contents = highlight(src, TextLexer(), HtmlFormatter())
+    return contents
+
+def heading(text, level):
+    """return as html heading at h[level]"""
+    hl = 'h%s' % str(level)
+    return '\n<%s>%s</%s>\n' % (hl, text, hl)
 
 # Define routes
 
@@ -161,7 +195,7 @@ def page_not_found(e):
 @app.route("/")
 def index():
     """provides index page"""
-    index = StaticPage('index')
+    index = Page('index')
     return index.generate_page()
 
 # default route is it doe not exist elsewhere
@@ -171,7 +205,7 @@ def staticpage(page):
     i.e. displays /page or /page/ as long as src/page.md exists.
     srcfile, title and heading may be set in the pages global 
     (ordered) dictionary but are not required"""
-    static_page = StaticPage(page)
+    static_page = Page(page)
     return static_page.generate_page()
 
 @app.route("/source")
@@ -184,23 +218,18 @@ def source():
     special_pages = ['source', 'unit-tests', '404']
     if not page in special_pages and pagesrc is None:
         abort(404)
-    # render the source for unit tests if appropriate, otherwise views.py
-    if page == 'unit-tests':
-        srcfile = 'tests.py'
-    else:
-        srcfile = src_file('views.py')
-    # render views.py etc
     contents = '<p><a href="/unit-tests">Run unit tests</a></p>'
-    with open(srcfile, 'r') as f:
-        src = f.read()
-    code = highlight(src, PythonLexer(), HtmlFormatter())
-    contents += "<h2>%s</h2>\n%s" % (os.path.basename(srcfile), code)
+    # render tests.py if needed
+    if page == 'unit-tests':
+        contents += heading('tests.py', 2)
+        contents += render_pygments('tests.py', 'python')
+    # render views.py
+    contents += heading('views.py', 2)
+    contents += render_pygments(get_page_src('views.py'), 'python')
     # render markdown if present
     if pagesrc:
-        with open(pagesrc, 'r') as f:
-            markdown = f.read()
-            contents  += "<h2>%s</h2>" % os.path.basename(pagesrc)
-            contents += highlight(markdown, TextLexer(), HtmlFormatter())
+        contents += heading(os.path.basename(pagesrc), 2)
+        contents += render_pygments(pagesrc, 'markdown')
     # format contents
     css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
     return render_template("static.html", internal_css =  css,
@@ -216,19 +245,17 @@ def unit_tests():
             stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     output = capture.communicate()
     results = output[1]
-    contents = '<p><a href="/unit-tests">Run unit tests</a></p>'
-    contents += '<div class="output">'
+    contents = '''<p><a href="/unit-tests">Run unit tests</a></p>
+    <div class="output">\n'''
     if 'OK' in results:
         contents += "<strong>TESTS PASSED</strong>"
     else:
         contents += "<strong>TESTS FAILING</strong>"
-    contents += '<pre>%s</pre>'  % results
+    contents += '\n<pre>%s</pre>\n'  % results
     contents += '</div>'
     # render test.py 
-    with open('tests.py', 'r') as f:
-        src = f.read()
-    code = highlight(src, PythonLexer(), HtmlFormatter())
-    contents += "<h2>%s</h2>\n%s" % ('tests.py', code)
+    contents += heading('tests.py', 2)
+    contents += render_pygments('tests.py', 'python')
     css = HtmlFormatter(style="friendly").get_style_defs('.highlight')
     return render_template("static.html", internal_css =  css,
         heading = "Test Results", 

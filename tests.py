@@ -4,6 +4,7 @@ import tempfile
 import os
 import os.path
 
+
 class ResumeTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -31,6 +32,22 @@ class ResumeTestCase(unittest.TestCase):
         self.assertFalse(staticpage.trusted)
    
    # Test helper functions
+
+    def test_get_page_attribute(self):
+        pages = { 'test' : {'src' : 'test.md'}}
+        result = resumemaker.views.get_page_attribute(pages, 'test', 'src')
+        self.assertEquals(result, 'test.md')
+
+    def test_get_page_attribute_no_page(self):
+        pages = { 'test' : {'src' : 'test.md'}}
+        result = resumemaker.views.get_page_attribute(pages, 'notest', 'src')
+        self.assertIsNone(result)
+    
+    def test_get_page_attribute_no_attribute(self):
+        pages = { 'test' : {'src' : 'test.md'}}
+        result = resumemaker.views.get_page_attribute(pages, 'test', 'nosrc')
+        self.assertIsNone(result)
+
     def test_src_file(self):
         result = resumemaker.views.src_file('test')
         self.assertEquals(result, 'resumemaker/test')
@@ -79,7 +96,18 @@ class ResumeTestCase(unittest.TestCase):
         markdown = resumemaker.views.render_markdown(self.tmpfile.name,
                 trusted=True)
         assert '&aleph;' in markdown
-       
+   
+    def test_pygments_renderer(self):
+        results = resumemaker.views.render_pygments(self.tmpfile.name,
+                'markdown')
+        assert '<pre>' in results
+        assert 'test' in results
+
+    def test_heading(self):
+        expected = '\n<h1>test</h1>\n'
+        result = resumemaker.views.heading('test', 1)
+        self.assertEquals(result, expected)
+
     # Test page display/routes
     # Some of these  are dependent on templates and contents supplied,
     # but we want to test our end points
@@ -151,7 +179,6 @@ class ResumeTestCase(unittest.TestCase):
         # N.B. this makes assumptions about page layout
         # i.e. page names rendered as h2 heading
         assert '<h2>tests.py' in source_page.data
-        assert '<h2>views.py' not in source_page.data
     
     def test_source_page_for_rendered_unittests(self):
         source_page = self.app.get('/source?page=unit-tests')
