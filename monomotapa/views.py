@@ -31,8 +31,7 @@ See http://paulmunday.net/license for licensing details.
 from flask import render_template, abort, Markup, escape, request 
 
 from pygments import highlight
-from pygments.lexers import PythonLexer
-from pygments.lexers import TextLexer
+from pygments.lexers import PythonLexer, HtmlDjangoLexer, TextLexer
 from pygments.formatters import HtmlFormatter
 
 import os.path
@@ -203,6 +202,10 @@ def render_pygments(srcfile, lexer_type):
         with open(srcfile, 'r') as f:
             src = f.read()
             contents = highlight(src, PythonLexer(), HtmlFormatter())
+    elif lexer_type == 'html':
+        with open(srcfile, 'r') as f:
+            src = f.read()
+            contents = highlight(src, HtmlDjangoLexer(), HtmlFormatter())
     # default to TextLexer for everything else
     else:
         with open(srcfile, 'r') as f:
@@ -261,7 +264,8 @@ def source():
     special_pages = ['source', 'unit-tests', '404']
     if not page in special_pages and pagesrc is None:
         abort(404)
-    contents = '<p><a href="/unit-tests">Run unit tests</a></p>'
+    contents = '''<p><a href="/unit-tests" class="button">Run unit tests
+    </a></p>'''
     # render tests.py if needed
     if page == 'unit-tests':
         contents += heading('tests.py', 2)
@@ -273,6 +277,13 @@ def source():
     if pagesrc:
         contents += heading(os.path.basename(pagesrc), 2)
         contents += render_pygments(pagesrc, 'markdown')
+    # render jinja templates
+    contents += heading('base.html', 2)
+    contents += render_pygments(
+            get_page_src('base.html', 'templates'), 'html')
+    contents += heading('static.html', 2)
+    contents += render_pygments(
+            get_page_src('static.html', 'templates'), 'html')
     # format contents
     css = get_pygments_css()
     return source_page.generate_page(contents, internal_css = css)
@@ -286,14 +297,18 @@ def unit_tests():
             stdout = subprocess.PIPE, stderr = subprocess.PIPE)
     output = capture.communicate()
     results = output[1]
-    contents = '''<p><a href="/unit-tests">Run unit tests</a></p>
-    <div class="output">\n'''
+    contents = '''<p>
+    <a href="/unit-tests" class="button">Run unit tests</a>
+    </p><br>\n
+    <div class="output" style="background-color:'''
     if 'OK' in results:
+        color = "#ddffdd"
         result = "TESTS PASSED"
     else:
+        color = "#ffaaaa"
         result = "TESTS FAILING"
-    contents += ("<strong>%s</strong>\n<pre>%s</pre>\n</div>\n"
-            % (result, results))
+    contents += ('''%s">\n<strong>%s</strong>\n<pre>%s</pre>\n</div>\n'''
+            % (color, result, results))
     # render test.py 
     contents += heading('tests.py', 2)
     contents += render_pygments('tests.py', 'python')

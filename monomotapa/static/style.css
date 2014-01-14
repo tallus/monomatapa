@@ -1,21 +1,53 @@
-body {
-    font-family: 'EB Garamond', Garamond, serif;
+* {margin:0;} 
+
+/* must declare 0 margins on everything, also for main layout components use padding, not 
+vertical margins (top and bottom) to add spacing, else those margins get added to total height 
+and your footer gets pushed down a bit more, creating vertical scroll bars in the browser */
+
+html, body {
+    height: 100%;
+}
+
+div#wrap {
+    min-height: 100%;
+}
+
+div#main {
+    overflow:auto;
+    padding-bottom: 50px;  /* must be same height as the footer */  
+}
+
+
+div#footer {
+    position: relative;
+    margin-top: -50px; /* negative value of footer height */
+    height: 50px;
+    clear:both; 
+}
+
+p#footer {
+    padding-top: 20px;
+    font-size: 0.8em;
+    padding-left: 2%;
 }
 
 div#content {
-    margin: 2% 2%;
+    padding: 1% 2%;
 }
 
 div.output{
     padding: 2%;
-    background-color: #EEE;
+}
+
+div.highlight{
+    padding: 2%;
 }
 
 h1 {
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 3em;
     font-weight: normal;
-    margin: 0 0 0 5%;
+    padding: 0 0 1% 5%;
     clear: both;
 }
 
@@ -23,22 +55,39 @@ h2{
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 1.75em;
     font-weight: normal;
+    padding:0.5em 0;
 }
 
 h3{
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 1.5em;
     font-weight: normal;
+    padding:0.5em 0;
 }
+
+
+p {
+    padding:0.5em 0;
+}
+
 
 a {
     color: #333;
 }
 
+a.button{
+    padding: 0.3em;
+    background-color:#e2e2e2;
+    border: solid 1px;
+#    display: block;
+    text-decoration: none;
+}
+
 ul#nav {
     display: block;
-    margin: 0 5%;
-    padding: 0;
+    /*margin: 0 5%;
+    padding: 0;*/
+    padding-left: 5%;
     list-style-type: none;
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 1.2em;

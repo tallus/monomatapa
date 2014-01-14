@@ -16,37 +16,48 @@
 {% endif %}
 </head>
 <body>
-    <div id="nav">
-       <ul id="nav">
-        {%- for item in navigation.navigation.itervalues() -%}
-            <li><a href="
-            {%- if item.url -%}{{item.url}}
-            {%- elif item.urlfor -%}
-                {%- if item.urlfor == "source" -%}
-                    {{ url_for(item.urlfor, page=navigation.page) }}
+<div id="wrap">
+    <div id="main">
+        <div id="nav">
+           <ul id="nav">
+            {%- for item in navigation.navigation.itervalues() -%}
+                <li><a href="
+                {%- if item.url -%}{{item.url}}
+                {%- elif item.urlfor -%}
+                    {%- if item.urlfor == "source" -%}
+                        {{ url_for(item.urlfor, page=navigation.page) }}
+                    {%- else -%}
+                        {{ url_for(item.urlfor) }}
+                    {%- endif -%}
                 {%- else -%}
-                    {{ url_for(item.urlfor) }}
+                    {{ url_for('staticpage', page=item.base) }}
                 {%- endif -%}
-            {%- else -%}
-                {{ url_for('staticpage', page=item.base) }}
-            {%- endif -%}
-            ">{{item.link_text}}</a></li>
-            {% endfor -%}
-        </ul>
+                ">{{item.link_text}}</a></li>
+                {% endfor -%}
+            </ul>
+        </div>
+        <div> 
+            {% if heading %}<h1>{{heading}}</h1>{% endif %}
+        </div> 
+        <div id="messages">
+            <hr>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
     </div>
-    <div>
-        {% if heading %}<h1>{{heading}}</h1>{% endif %}
-    <div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    <div id = "content">
-        {% block content %}{% endblock %}
-    </div>
+</div>
+<div id="footer">
+    <p id="footer">
+    Copyright &copy; Paul Munday, 2014. See <a href="{{ url_for('staticpage', page='license') }}">license</a> for more details.
+    </p>
+</div>
 </body>
 </html>

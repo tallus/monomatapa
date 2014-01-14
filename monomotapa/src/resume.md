@@ -88,6 +88,6 @@ Volunteer mechanic in community bike projects. Volunteer at Repair Cafe.
 
 In addition to volunteering in a number of roles including IT consultant,
 as well as  being a parent, I currently spend my free time writing 
-code based art projects and contributing to open source projects and keep up 
+code based art projects, contributing to open source projects and keeping up 
 up with  my book collecting and reading habits.
 
