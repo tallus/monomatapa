@@ -1,3 +1,8 @@
+"""
+Copyright (C) 2014, Paul Munday.
+See http://paulmunday.net/license for licensing details.  
+"""
+
 import monomotapa
 import unittest
 import tempfile

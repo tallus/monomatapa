@@ -12,5 +12,8 @@
      },
  "code": {
      "trusted": true
+    },
+ "license": {
+     "trusted": true
     }
 }
