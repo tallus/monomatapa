@@ -1,4 +1,4 @@
-import resumemaker
+import monomotapa
 import unittest
 import tempfile
 import os
@@ -8,8 +8,8 @@ import os.path
 class ResumeTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.app = resumemaker.app.test_client()
-        path = 'resumemaker/src/'
+        self.app = monomotapa.app.test_client()
+        path = 'monomotapa/src/'
         self.tmpfile = tempfile.NamedTemporaryFile(suffix=".md",
                 dir=path, delete=False)
         self.filename = os.path.basename(self.tmpfile.name)
@@ -25,7 +25,7 @@ class ResumeTestCase(unittest.TestCase):
     # flask's context, testing is implicit, test_static_page etc)
 
     def test_Page(self):
-        staticpage = resumemaker.views.Page(self.route)
+        staticpage = monomotapa.views.Page(self.route)
         self.assertEquals(staticpage.name, self.route)
         self.assertEquals(staticpage.title, self.route.lower())
         self.assertEquals(staticpage.heading, self.route.capitalize())
@@ -35,81 +35,81 @@ class ResumeTestCase(unittest.TestCase):
 
     def test_get_page_attribute(self):
         pages = { 'test' : {'src' : 'test.md'}}
-        result = resumemaker.views.get_page_attribute(pages, 'test', 'src')
+        result = monomotapa.views.get_page_attribute(pages, 'test', 'src')
         self.assertEquals(result, 'test.md')
 
     def test_get_page_attribute_no_page(self):
         pages = { 'test' : {'src' : 'test.md'}}
-        result = resumemaker.views.get_page_attribute(pages, 'notest', 'src')
+        result = monomotapa.views.get_page_attribute(pages, 'notest', 'src')
         self.assertIsNone(result)
     
     def test_get_page_attribute_no_attribute(self):
         pages = { 'test' : {'src' : 'test.md'}}
-        result = resumemaker.views.get_page_attribute(pages, 'test', 'nosrc')
+        result = monomotapa.views.get_page_attribute(pages, 'test', 'nosrc')
         self.assertIsNone(result)
 
     def test_src_file(self):
-        result = resumemaker.views.src_file('test')
-        self.assertEquals(result, 'resumemaker/test')
+        result = monomotapa.views.src_file('test')
+        self.assertEquals(result, 'monomotapa/test')
 
     def test_src_file_with_dir(self):
-        result = resumemaker.views.src_file('test', 'src')
-        self.assertEquals(result, 'resumemaker/src/test')
+        result = monomotapa.views.src_file('test', 'src')
+        self.assertEquals(result, 'monomotapa/src/test')
 
     def test_get_extension_no_period(self):
-        result = resumemaker.views.get_extension('md')
+        result = monomotapa.views.get_extension('md')
         self.assertEquals(result, '.md')
     
     def test_get_extension_with_period(self):
-        result = resumemaker.views.get_extension('.md')
+        result = monomotapa.views.get_extension('.md')
         self.assertEquals(result, '.md')
     
     def test_get_extension_with_None(self):
-        result = resumemaker.views.get_extension(None)
+        result = monomotapa.views.get_extension(None)
         self.assertEquals(result, '')
 
     def test_get_page_src(self):
-        result = resumemaker.views.get_page_src(self.filename, 'src')
-        self.assertEquals(result, 'resumemaker/src/' + self.filename)
+        result = monomotapa.views.get_page_src(self.filename, 'src')
+        self.assertEquals(result, 'monomotapa/src/' + self.filename)
 
     def test_get_page_src_with_extension(self):
-        result = resumemaker.views.get_page_src(self.route, 'src', 'md')
-        self.assertEquals(result, 'resumemaker/src/' + self.filename)
+        result = monomotapa.views.get_page_src(self.route, 'src', 'md')
+        self.assertEquals(result, 'monomotapa/src/' + self.filename)
     
     def test_get_page_src_with_lookup(self):
-        result = resumemaker.views.get_page_src('index', 'src')
-        self.assertEquals(result, 'resumemaker/src/resume.md')
+        result = monomotapa.views.get_page_src('index', 'src')
+        self.assertEquals(result, 'monomotapa/src/resume.md')
     
     def test_get_page_src_nonexistant_source(self):
-        result = resumemaker.views.get_page_src('non_existant')
+        result = monomotapa.views.get_page_src('non_existant')
         self.assertIsNone(result)
 
     def test_render_markdown(self):
-        markdown = resumemaker.views.render_markdown(self.tmpfile.name)
+        markdown = monomotapa.views.render_markdown(self.tmpfile.name)
         self.assertIn( 'test', markdown)
 
     def test_render_markdown_untrusted(self):
-        markdown = resumemaker.views.render_markdown(self.tmpfile.name)
+        markdown = monomotapa.views.render_markdown(self.tmpfile.name)
         self.assertNotIn( '&aleph;', markdown)
     
     def test_render_markdown_trusted(self):
-        markdown = resumemaker.views.render_markdown(self.tmpfile.name,
+        markdown = monomotapa.views.render_markdown(self.tmpfile.name,
                 trusted=True)
         self.assertIn('&aleph;', markdown)
    
     def test_pygments_renderer(self):
-        results = resumemaker.views.render_pygments(self.tmpfile.name,
+        results = monomotapa.views.render_pygments(self.tmpfile.name,
                 'markdown')
         self.assertIn('<pre>', results)
         self.assertIn('test', results)
 
     def test_get_pygments_css(self):
-        css = resumemaker.views.get_pygments_css()
+        css = monomotapa.views.get_pygments_css()
         self.assertIn('.highlight', css)
 
     def test_heading(self):
         expected = '\n<h1>test</h1>\n'
-        result = resumemaker.views.heading('test', 1)
+        result = monomotapa.views.heading('test', 1)
         self.assertEquals(result, expected)
 
     # Test page display/routes

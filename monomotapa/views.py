@@ -15,7 +15,7 @@ import json
 import markdown
 import subprocess
 
-from resumemaker import app
+from monomotapa import app
 
 def get_page_attributes(jsonfile):
     """Returns dictionary of page_attributes.
@@ -125,9 +125,9 @@ class Page:
 def src_file(name, directory=None):
     """return potential path to file in this app"""
     if not directory:
-        return os.path.join( 'resumemaker', name)
+        return os.path.join( 'monomotapa', name)
     else:
-        return os.path.join('resumemaker', directory, name)
+        return os.path.join('monomotapa', directory, name)
 
 
 def get_extension(ext):
