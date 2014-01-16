@@ -102,7 +102,7 @@ def top_navigation(page):
 # For pages
 class Page:
     """Generates  pages as objects"""
-    def __init__(self, page, title=None, heading=None):
+    def __init__(self, page, title=None, heading=None, template = None):
         """Define attributes for  pages (if present).
         Sets self.name, self.title, self.heading, self.trusted
         This is done through indirection so we can update the defaults 
@@ -133,7 +133,8 @@ class Page:
         else:
             return render_markdown(src, self.trusted)
 
-    def generate_page(self, contents=None, internal_css=None):
+    def generate_page(self, contents=None, internal_css=None, 
+            template="static.html"):
         """return a page generator function.
         For static pages written in Markdown under src/.
         contents are automatically rendered"""
@@ -141,7 +142,7 @@ class Page:
             contents = self._get_markdown()
         def page_generator(contents=contents, heading=self.heading, 
                 title=self.title, internal_css = internal_css):
-            return render_template("static.html",
+            return render_template(template,
                 title = title, heading = heading, 
                 internal_css = internal_css,
                 navigation =  top_navigation(self.page), 
@@ -240,7 +241,7 @@ def page_not_found(e):
 def index():
     """provides index page"""
     index = Page('index')
-    return index.generate_page()
+    return index.generate_page(template="home.html")
 
 # default route is it doe not exist elsewhere
 @app.route("/<path:page>")
@@ -251,6 +252,12 @@ def staticpage(page):
     (ordered) dictionary but are not required"""
     static_page = Page(page)
     return static_page.generate_page()
+
+@app.route("/resume")
+def resume():
+    """provides resume page"""
+    resume = Page('resume')
+    return resume.generate_page(template="resume.html")
 
 @app.route("/source")
 def source():

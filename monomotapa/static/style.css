@@ -1,4 +1,13 @@
+/*  
+ *  Sticky Footer Solution
+ *  by Steve Hatcher 
+ *  http://stever.ca
+ *  http://www.cssstickyfooter.com
+ *  */
+
+
 * {margin:0;} 
+
 
 /* must declare 0 margins on everything, also for main layout components use padding, not 
 vertical margins (top and bottom) to add spacing, else those margins get added to total height 
@@ -17,18 +26,34 @@ div#main {
     padding-bottom: 50px;  /* must be same height as the footer */  
 }
 
+div#home{
+    font-size: 1.2em;
+    padding: 5% 20%;
+    color: #444;
+}
 
 div#footer {
-    position: relative;
+    padding-top: 10px;
+    position: relative; 
     margin-top: -50px; /* negative value of footer height */
     height: 50px;
     clear:both; 
 }
 
 p#footer {
-    padding-top: 20px;
+    padding-top: 15px;
     font-size: 0.8em;
-    padding-left: 2%;
+    text-align: center;
+    /* padding-left: 2%; */
+    color: #aaa;
+}
+
+div#resume-footer {
+    padding-top:20px;
+}
+
+p#resume-footer {
+    padding-left:20px;
 }
 
 div#content {
@@ -103,4 +128,7 @@ ul#nav a {
     padding: 0 1em;
     text-decoration: none;
     color: #999;
+}
+hr {
+    color: #aaa;
 }

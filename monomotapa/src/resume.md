@@ -69,6 +69,9 @@ IT Co-ordinator**, River Ocean Research and Education.
 
 ### Community Service and Artistic Practice
 
+**IT &amp; Open Source**
+I currently donate some of my time to non-profits as an IT consultant and I am a contributer to, and maintainer of several open source projects.
+
 **Performance**
 I trained for three years in Dance and Performance, and have performed at a
 semi-professional level.
@@ -82,12 +85,4 @@ basis for many years.
 
 **Mechanic**
 Volunteer mechanic in community bike projects. Volunteer at Repair Cafe.
-
-
-### Interests
-
-In addition to volunteering in a number of roles including IT consultant,
-as well as  being a parent, I currently spend my free time writing 
-code based art projects, contributing to open source projects and keeping up 
-up with  my book collecting and reading habits.
 

@@ -1,5 +1,5 @@
 {
-    "nav_order": ["index", "code",  "colophon", "source"],
+    "nav_order": ["index", "resume", "code",  "colophon", "source"],
     "nav_elements": {
         "index": {
             "link_text": "home",
