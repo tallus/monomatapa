@@ -28,19 +28,19 @@ Copyright (C) 2014, Paul Munday.
 See http://paulmunday.net/license for licensing details.  
 """
 
-from flask import render_template, abort, Markup, escape, request 
+from flask import render_template, abort, Markup, escape, request, make_response
 
 from pygments import highlight
 from pygments.lexers import PythonLexer, HtmlDjangoLexer, TextLexer
 from pygments.formatters import HtmlFormatter
 
 import os.path
-
-from collections import OrderedDict
-
+import os
 import json
 import markdown
 import subprocess
+import tempfile
+from collections import OrderedDict
 
 from monomotapa import app
 
@@ -267,13 +267,28 @@ def staticpage(page):
     static_page = Page(page)
     return static_page.generate_page()
 
-'''
-@app.route("/resume")
+@app.route("/resume.pdf")
 def resume():
-    """provides resume page"""
-    resume = Page('resume')
-    return resume.generate_page(template="resume.html")
-'''
+    """renders up to date  resume as pdf"""
+    tmpfile =  tempfile.NamedTemporaryFile(delete=False)
+    print(tmpfile.name)
+    resume = src_file('resume.md', 'src')
+    output = src_file('resume.pdf', 'static')
+    with open(tmpfile.name ,'a') as f:
+        f.write("# Paul Munday\n")
+        f.write('''www.paulmunday.net&nbsp;&nbsp;&nbsp;
+        contactme at paulmunday.net&nbsp;&nbsp;&nbsp;
+        503-318-8922\n\n''')
+        with open(resume, 'r') as rfile:
+            contents = rfile.read()
+        f.write(contents)
+    subprocess.call(["pandoc", tmpfile.name, "-s", "-o", output]) 
+    os.unlink(tmpfile.name)
+    with open(output, 'r') as pdfile:
+        pdf = pdfile.read()
+    response = make_response(pdf, 200)
+    response.headers["Content-Type"] = "Application/pdf"
+    return response
 
 @app.route("/source")
 def source():
