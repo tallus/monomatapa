@@ -43,3 +43,5 @@ tags
 # ignore Vagrant file
 Vagrantfile
 .vagrant
+
+*.bak

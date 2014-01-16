@@ -3,6 +3,7 @@
     "src": "home.md",
     "title": "home", 
     "heading": "Paul Munday",
+     "template": "home.html",
     "trusted": true
     },
  "about": {
@@ -17,6 +18,8 @@
      "trusted": true
     },
  "resume": {
+     "heading": "Paul Munday",
+     "template": "resume.html",
      "trusted": true
     }
 }

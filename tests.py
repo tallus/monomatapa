@@ -26,8 +26,8 @@ class ResumeTestCase(unittest.TestCase):
         os.unlink(self.tmpfile.name)
    
     # Test Page class
-    # generate_page is not tested here as it is reliant on 
-    # flask's context, testing is implicit, test_static_page etc)
+    # generate_page is not tested directlu here as it is reliant on 
+    # flask's context, testing is implicit in test_static_page etc)
 
     def test_Page(self):
         staticpage = monomotapa.views.Page(self.route)
@@ -36,6 +36,43 @@ class ResumeTestCase(unittest.TestCase):
         self.assertEquals(staticpage.heading, self.route.capitalize())
         self.assertFalse(staticpage.trusted)
    
+    # test generate page via call to home page
+    
+    def test_generate_page_with_template(self):
+        index_page = self.app.get('/')
+        # makes assumptions about templating/content
+        self.assertIn('<div id="home">', index_page.data)
+ 
+    def test_get_page_src(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_page_src(self.filename, 'src')
+        self.assertEquals(result, 'monomotapa/src/' + self.filename)
+
+    def test_get_page_src_with_extension(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_page_src(self.route, 'src', 'md')
+        self.assertEquals(result, 'monomotapa/src/' + self.filename)
+    
+    def test_get_page_src_with_lookup(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_page_src('index', 'src')
+        self.assertEquals(result, 'monomotapa/src/home.md')
+    
+    def test_get_page_src_nonexistant_source(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_page_src('non_existant')
+        self.assertIsNone(result)
+
+    def test_get_template(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_template(self.route)
+        self.assertEquals(result, 'static.html')
+   
+    def test_get_template_with_template(self):
+        page = monomotapa.views.Page(self.route)
+        result = page.get_template('index')
+        self.assertEquals(result, 'home.html')
+
    # Test helper functions
 
     def test_get_page_attribute(self):
@@ -72,22 +109,6 @@ class ResumeTestCase(unittest.TestCase):
     def test_get_extension_with_None(self):
         result = monomotapa.views.get_extension(None)
         self.assertEquals(result, '')
-
-    def test_get_page_src(self):
-        result = monomotapa.views.get_page_src(self.filename, 'src')
-        self.assertEquals(result, 'monomotapa/src/' + self.filename)
-
-    def test_get_page_src_with_extension(self):
-        result = monomotapa.views.get_page_src(self.route, 'src', 'md')
-        self.assertEquals(result, 'monomotapa/src/' + self.filename)
-    
-    def test_get_page_src_with_lookup(self):
-        result = monomotapa.views.get_page_src('index', 'src')
-        self.assertEquals(result, 'monomotapa/src/resume.md')
-    
-    def test_get_page_src_nonexistant_source(self):
-        result = monomotapa.views.get_page_src('non_existant')
-        self.assertIsNone(result)
 
     def test_render_markdown(self):
         markdown = monomotapa.views.render_markdown(self.tmpfile.name)
@@ -131,7 +152,6 @@ class ResumeTestCase(unittest.TestCase):
         title = '<title>paulmunday.net::%s</title>' % 'home'
         self.assertIn( title, index_page.data)
 
-
     def test_static_page(self):
         static_page = self.app.get('/' +  self.route)
         # tests for content
@@ -159,7 +179,14 @@ class ResumeTestCase(unittest.TestCase):
     def test_static_page_200(self):
         static_page = self.app.get('/' + self.route)
         self.assertEquals(static_page.status_code, 200)
-    
+ 
+    def test_resume(self):
+        resume_page = self.app.get('/resume')
+        # makes assumptions about templating/content
+        self.assertIn(
+                'Download this resume as a <a href="/static/resume.pdf">pdf',
+                resume_page.data)
+   
     def test_source_page(self):
         source_page = self.app.get('/source?page=%s' % self.route)
         self.assertIn(self.filename, source_page.data)
@@ -194,5 +221,14 @@ class ResumeTestCase(unittest.TestCase):
         # always true if this test is rendered
         self.assertIn('def test_source_page_for_unittests', source_page.data)
 
+    def test_source_page_for_rendered_template(self):
+        source_page = self.app.get('/source?page=%s' % self.route)
+        # always true if this test is rendered
+        self.assertIn('static.html', source_page.data)
+
+    def test_source_page_for_rendered_template_set(self):
+        source_page = self.app.get('/source?page=%s' % 'index')
+        # always true if this test is rendered
+        self.assertIn('home.html', source_page.data)
 if __name__ == '__main__':
     unittest.main()

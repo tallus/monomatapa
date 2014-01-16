@@ -114,34 +114,63 @@ class Page:
             title = page.lower()
         if not heading:
             heading = page.capitalize()
-        # will become self.name, self.title, self.heading, self.trusted
-        attributes = {'name' : self.page, 'title' : title, 
-                'heading' : heading, 'trusted': False}
+        # will become self.name, self.title, self.heading, 
+        # self.trusted, self.template
+        attributes = {'name' : self.page, 'title' : title, 'heading' : heading,
+                template: 'static.html', 'trusted': False}
         # overide attributes if set in pages.json
-        pages = get_page_attributes('pages.json')
-        if page in pages:
-            attributes.update(pages[page])
+        self.pages = get_page_attributes('pages.json')
+        if page in self.pages:
+            attributes.update(self.pages[page])
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
 
     def _get_markdown(self):
         """returns rendered markdown or 404 if source does not exist"""
-        src = get_page_src(self.page, 'src', 'md') 
+        src = self.get_page_src(self.page, 'src', 'md') 
         if src is None:
             abort(404)
         else:
             return render_markdown(src, self.trusted)
 
-    def generate_page(self, contents=None, internal_css=None, 
-            template="static.html"):
+    def get_page_src(self, page, directory=None, ext=None):
+        """"return path of file (used to generate page) if it exists,
+        or return none.
+        Also returns the template used to render that page, defaults
+        to static.html.
+        It will optionally add an extension, to allow 
+        specifiying pages by route."""
+        # is it stored in a config
+        pagename = get_page_attribute(self.pages, page, 'src')
+        if not pagename:
+            pagename = page + get_extension(ext)
+        if os.path.exists(src_file(pagename , directory)):
+            return src_file(pagename, directory)
+        else:
+            return None
+
+    def get_template(self, page):
+        pagetemplate = get_page_attribute(self.pages, page, 'template')
+        if not pagetemplate:
+            pagetemplate = 'static.html'
+        if os.path.exists(src_file(pagetemplate , 'templates')):
+            return pagetemplate
+        else:
+            # return static.html if we can't find the template
+            return 'static.html'
+
+
+    def generate_page(self, contents=None, internal_css=None):
         """return a page generator function.
         For static pages written in Markdown under src/.
         contents are automatically rendered"""
         if not contents:
             contents = self._get_markdown()
+        template = self.get_template(self.page)
         def page_generator(contents=contents, heading=self.heading, 
-                title=self.title, internal_css = internal_css):
+                title=self.title, internal_css = internal_css, 
+                template=template):
             return render_template(template,
                 title = title, heading = heading, 
                 internal_css = internal_css,
@@ -168,21 +197,6 @@ def get_extension(ext):
     else:
         return '.%s' % ext
 
-
-def get_page_src(page, directory=None, ext=None):
-    """"return path of file (used to generate page) if it exists,
-    or return none.It will optionally add an extension, to allow 
-    specifiying pages by route."""
-    # is it stored in a config
-    pages = get_page_attributes('pages.json')
-    pagename = get_page_attribute(pages, page, 'src')
-    if not pagename:
-        pagename = page + get_extension(ext)
-    if os.path.exists(src_file(pagename , directory)):
-        return src_file(pagename, directory)
-    else:
-        return None
-  
 def render_markdown(srcfile, trusted=False):
     """Return markdown file rendered as html. Defaults to untrusted:
         html characters (and character entities) are escaped 
@@ -241,7 +255,7 @@ def page_not_found(e):
 def index():
     """provides index page"""
     index = Page('index')
-    return index.generate_page(template="home.html")
+    return index.generate_page()
 
 # default route is it doe not exist elsewhere
 @app.route("/<path:page>")
@@ -253,11 +267,13 @@ def staticpage(page):
     static_page = Page(page)
     return static_page.generate_page()
 
+'''
 @app.route("/resume")
 def resume():
     """provides resume page"""
     resume = Page('resume')
     return resume.generate_page(template="resume.html")
+'''
 
 @app.route("/source")
 def source():
@@ -267,7 +283,7 @@ def source():
     page = request.args.get('page')
     # get source for markdown if any. 404's for non-existant markdown
     # unless special page eg source
-    pagesrc = get_page_src(page, 'src', 'md')
+    pagesrc = source_page.get_page_src(page, 'src', 'md')
     special_pages = ['source', 'unit-tests', '404']
     if not page in special_pages and pagesrc is None:
         abort(404)
@@ -279,7 +295,8 @@ def source():
         contents += render_pygments('tests.py', 'python')
     # render views.py
     contents += heading('views.py', 2)
-    contents += render_pygments(get_page_src('views.py'), 'python')
+    contents += render_pygments(source_page.get_page_src('views.py'), 
+            'python')
     # render markdown if present
     if pagesrc:
         contents += heading(os.path.basename(pagesrc), 2)
@@ -287,10 +304,11 @@ def source():
     # render jinja templates
     contents += heading('base.html', 2)
     contents += render_pygments(
-            get_page_src('base.html', 'templates'), 'html')
-    contents += heading('static.html', 2)
+            source_page.get_page_src('base.html', 'templates'), 'html')
+    template = source_page.get_template(page)
+    contents += heading(template, 2)
     contents += render_pygments(
-            get_page_src('static.html', 'templates'), 'html')
+            source_page.get_page_src(template, 'templates'), 'html')
     # format contents
     css = get_pygments_css()
     return source_page.generate_page(contents, internal_css = css)
