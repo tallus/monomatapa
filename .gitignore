@@ -45,4 +45,4 @@ Vagrantfile
 .vagrant
 
 *.bak
-monomotapa/static/resume.pdf
+*.pdf

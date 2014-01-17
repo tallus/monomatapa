@@ -305,7 +305,7 @@ def resume_pdf():
     # done by call to external util
     tmpfile =  tempfile.NamedTemporaryFile(delete=False)
     resume = src_file('resume.md', 'src')
-    output = src_file('resume.pdf', 'static')
+    output = src_file('resume.pdf', 'src')
     name = name_obfuscator('paul')
     domain = 'paulmunday.net'
     header = "#Paul Munday\nwww.%s&nbsp;&nbsp;%s@%s\n\n" % (domain, 
