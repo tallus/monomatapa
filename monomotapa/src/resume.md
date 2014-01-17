@@ -1,25 +1,22 @@
 ## Key Skills
 **Programming**
-*Core competencies:* Python, Bash/Shell Scripting, Git, Test driven development.
+*Core competencies:* Python, Bash/Shell Scripting, Git, Test-driven development.
 *Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound  and HTML/CSS. 
 
 **Linux/Unix Systems and Network Administration**
-High Availability Systems, Apache, Mysql and other DB, Email systems
+High Availability Systems, Apache, MySQL and other databases, email systems
 e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric.
 Systems design. As a systems administrator my primary focus has been on open 
 source and Internet technologies.
 
 **Technical Support**
-Linux specialist with experience of front and backline support, software and
-hardware. I have managed others and developed software and systems in this
-role. 
+Linux specialist with experience of front and backline support. I have managed others and provided support for them through expert knowledge, mentoring and developing documented solutions to new problems. I have developed software systems and processes in this role. 
 
 ### Other Skills
 
 **Teaching/Training**
 A certified and experienced tutor/trainer, I have devised and taught a number 
-of IT based courses and workshops including sound editing and radio production,
-web design and introductory computing. 
+of IT based courses and workshops including web design, introductory computing, and sound editing and radio production. 
 
 **Management**
 I have extensive experience in the non-profit sector, managing paid and 
@@ -31,7 +28,7 @@ facilitation and community building.
 ## Past Work
 
 **November 2010&ndash;December 2013: 
-Technical Support Specialist/Co-ordinator** at Free Geek. Managed paid workers 
+Technical Support Specialist/Coordinator** at Free Geek. Managed paid workers 
 and volunteers, and provided Level 3 support, in a department offering hardware
 and Linux based software tech support for up to 2000 end users. Outside of core
 duties my initial focus was on rebuilding a chaotic paper based system that 
@@ -40,12 +37,12 @@ and efficient use of an electronic ticketing system I was able to achieve a
 target turn around time of three days or less. Later my focus was on developing
 software tools for internal use including a backup and system replication tool
 and a number of  libraries and tools for interacting with the ticket system's 
-API. In addition I did extensive organizational development outside my
+API. In addition, I did extensive organizational development outside my
 department and assisted in systems administration where needed. 
 
 **April 2010&ndash;November 2010:
 Tutor**, SUN project Ron Russell Middle School. Worked as  part time tutor at 
-a after school project teaching IT related courses (e.g. web design).
+an after school project teaching IT related courses (e.g. web design).
 
 (February 2009-May 2010: During this time I permanently relocated to the USA 
 and for much of this time was unable to do paid work due to contractual 
@@ -75,7 +72,7 @@ IT Co-ordinator**, River Ocean Research and Education. Responsible for IT for an
 ### Community Service and Artistic Practice
 
 **IT &amp; Open Source**
-I currently donate some of my time to non-profits as an IT consultant and I am a contributer to, and author of  open source projects.
+I currently donate some of my time to non-profits as an IT consultant. I am a contributor to, and author of, open source projects.
 
 **Code as art** As  well as my more straight forward projects I an currently working on some code based art pieces using the web as technology for conceptual art. 
 **Performance**
