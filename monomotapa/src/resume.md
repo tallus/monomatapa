@@ -25,7 +25,7 @@ challenges faced in this sector including  training, recruiting and managing
 volunteers. It has also given me a wider set of skills in leadership, 
 facilitation and community building.
 
-## Past Work
+### Past Work
 
 **November 2010&ndash;December 2013: 
 Technical Support Specialist/Coordinator** at Free Geek. Managed paid workers 
