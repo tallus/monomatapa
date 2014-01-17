@@ -137,6 +137,10 @@ class ResumeTestCase(unittest.TestCase):
         expected = '\n<h1>test</h1>\n'
         result = monomotapa.views.heading('test', 1)
         self.assertEquals(result, expected)
+    
+    def test_name_obfuscator(self):
+        name = monomotapa.views.name_obfuscator('test')
+        self.assertRegexpMatches(name, 'test\.([a-z]|[0-9]){6}')
 
     # Test page display/routes
     # Some of these  are dependent on templates and contents supplied,
@@ -184,7 +188,7 @@ class ResumeTestCase(unittest.TestCase):
         resume_page = self.app.get('/resume')
         # makes assumptions about templating/content
         self.assertIn(
-                'Download this resume as a <a href="/static/resume.pdf">pdf',
+                'Download this resume as a <a href="/resume.pdf">PDF',
                 resume_page.data)
    
     def test_source_page(self):

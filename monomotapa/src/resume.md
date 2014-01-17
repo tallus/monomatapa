@@ -70,7 +70,7 @@ IT Co-ordinator**, River Ocean Research and Education.
 ### Community Service and Artistic Practice
 
 **IT &amp; Open Source**
-I currently donate some of my time to non-profits as an IT consultant and I am a contributer to, and maintainer of several open source projects.
+I currently donate some of my time to non-profits as an IT consultant and I am a contributer to, and author of  open source projects.
 
 **Performance**
 I trained for three years in Dance and Performance, and have performed at a

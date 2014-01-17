@@ -29,31 +29,15 @@ div#main {
 div#home{
     font-size: 1.2em;
     padding: 5% 20%;
-    color: #444;
+    color: #555;
 }
 
 div#footer {
-    padding-top: 10px;
+    /* padding-top: 10px;*/
     position: relative; 
     margin-top: -50px; /* negative value of footer height */
     height: 50px;
     clear:both; 
-}
-
-p#footer {
-    padding-top: 15px;
-    font-size: 0.8em;
-    text-align: center;
-    /* padding-left: 2%; */
-    color: #aaa;
-}
-
-div#resume-footer {
-    padding-top:20px;
-}
-
-p#resume-footer {
-    padding-left:20px;
 }
 
 div#content {
@@ -95,16 +79,25 @@ p {
     padding:0.5em 0;
 }
 
+p#footer {
+    /*padding-top: 15px;*/
+    font-size: 0.9em;
+    /*text-align: center; */
+    padding-left: 10%; 
+    color: #555;
+}
+
 
 a {
     color: #333;
+    text-decoration: none;
 }
 
 a.button{
     padding: 0.3em;
     background-color:#e2e2e2;
     border: solid 1px;
-#    display: block;
+    display: block;
     text-decoration: none;
 }
 
@@ -130,5 +123,7 @@ ul#nav a {
     color: #999;
 }
 hr {
-    color: #aaa;
+    border: 0;
+    background-color: #999;
+    height: 1px;
 }

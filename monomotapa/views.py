@@ -34,10 +34,12 @@ from pygments import highlight
 from pygments.lexers import PythonLexer, HtmlDjangoLexer, TextLexer
 from pygments.formatters import HtmlFormatter
 
+import markdown
+
 import os.path
 import os
 import json
-import markdown
+import random
 import subprocess
 import tempfile
 from collections import OrderedDict
@@ -115,9 +117,10 @@ class Page:
         if not heading:
             heading = page.capitalize()
         # will become self.name, self.title, self.heading, 
-        # self.trusted, self.template
-        attributes = {'name' : self.page, 'title' : title, 'heading' : heading,
-                template: 'static.html', 'trusted': False}
+        # self.footer, self.template, self.trusted
+        attributes = {'name' : self.page, 'title' : title, 
+            'heading' : heading, 'footer' : None, 
+            template: 'static.html', 'trusted': False}
         # overide attributes if set in pages.json
         self.pages = get_page_attributes('pages.json')
         if page in self.pages:
@@ -151,6 +154,7 @@ class Page:
             return None
 
     def get_template(self, page):
+        """returns the template for the page"""
         pagetemplate = get_page_attribute(self.pages, page, 'template')
         if not pagetemplate:
             pagetemplate = 'static.html'
@@ -161,24 +165,26 @@ class Page:
             return 'static.html'
 
 
-    def generate_page(self, contents=None, internal_css=None):
+    def generate_page(self, contents=None, internal_css=None, footer=None):
         """return a page generator function.
         For static pages written in Markdown under src/.
         contents are automatically rendered"""
         if not contents:
             contents = self._get_markdown()
         template = self.get_template(self.page)
+        if not footer:
+            footer = self.footer
         def page_generator(contents=contents, heading=self.heading, 
                 title=self.title, internal_css = internal_css, 
-                template=template):
+                template=template, footer=footer):
             return render_template(template,
                 title = title, heading = heading, 
-                internal_css = internal_css,
+                internal_css = internal_css, footer = footer,
                 navigation =  top_navigation(self.page), 
                 contents = Markup(contents)),
         return page_generator()
 
-# helper functions for static pages
+# helper functions
 def src_file(name, directory=None):
     """return potential path to file in this app"""
     if not directory:
@@ -240,6 +246,21 @@ def heading(text, level):
     hl = 'h%s' % str(level)
     return '\n<%s>%s</%s>\n' % (hl, text, hl)
 
+def name_obfuscator(name):
+    """returns name plus a random six character string joined by a .
+    characters are a..z or 0..9"""
+    container = [name, '.']
+    for _ in range(6):
+        # 97 = asci a 
+        randint = random.randint(97,132)
+        # 122 = z, if over that  subtracting 75 converts it to  0..9
+        if randint > 122:
+            randint = randint - 75
+        # add asci character
+        container.append(chr(randint))
+    return "".join(container)
+
+
 # Define routes
 
 @app.errorhandler(404)
@@ -267,24 +288,38 @@ def staticpage(page):
     static_page = Page(page)
     return static_page.generate_page()
 
-@app.route("/resume.pdf")
+# specialized pages
+
+@app.route("/resume")
 def resume():
-    """renders up to date  resume as pdf"""
+    resume = Page('resume')
+    name =  name_obfuscator('paul')
+    footer = '''Download this resume as a <a href="/resume.pdf">PDF</a>.<br>
+        Contact me: <script>address("%s","paulmunday",2,"")</script>''' % name
+    return resume.generate_page(footer=Markup(footer))
+
+@app.route("/resume.pdf")
+def resume_pdf():
+    """renders up to date  resume as pdf from markdown"""
+    # we need to use actual files here are pdf rendering is 
+    # done by call to external util
     tmpfile =  tempfile.NamedTemporaryFile(delete=False)
-    print(tmpfile.name)
     resume = src_file('resume.md', 'src')
     output = src_file('resume.pdf', 'static')
+    name = name_obfuscator('paul')
+    domain = 'paulmunday.net'
+    header = "#Paul Munday\nwww.%s&nbsp;&nbsp;%s@%s\n\n" % (domain, 
+        name, domain)
     with open(tmpfile.name ,'a') as f:
-        f.write("# Paul Munday\n")
-        f.write('''www.paulmunday.net&nbsp;&nbsp;&nbsp;
-        contactme at paulmunday.net&nbsp;&nbsp;&nbsp;
-        503-318-8922\n\n''')
+        f.write(header)
         with open(resume, 'r') as rfile:
             contents = rfile.read()
         f.write(contents)
-    subprocess.call(["pandoc", tmpfile.name, "-s", "-o", output]) 
+    # render pdf and remove temp file
+    subprocess.call(["pandoc", tmpfile.name, "-S", "-o", output]) 
     os.unlink(tmpfile.name)
-    with open(output, 'r') as pdfile:
+    # read pdf in as string and create flask response
+    with open(output, 'rb') as pdfile:
         pdf = pdfile.read()
     response = make_response(pdf, 200)
     response.headers["Content-Type"] = "Application/pdf"
