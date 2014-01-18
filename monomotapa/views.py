@@ -320,8 +320,6 @@ def resume_pdf():
     # read pdf in as string and create flask response
     with open(output, 'rb') as pdfile:
         pdf = pdfile.read()
-    if pdf =='':
-        pdf = 'failed to load pdf'
     response = make_response(pdf, 200)
     response.headers["Content-Type"] = "Application/pdf"
     return response
