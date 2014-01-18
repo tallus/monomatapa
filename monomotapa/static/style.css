@@ -102,7 +102,7 @@ a.button{
     padding: 0.3em;
     background-color:#e2e2e2;
     border: solid 1px;
-    display: block;
+    /* display: block; */
     text-decoration: none;
 }
 
