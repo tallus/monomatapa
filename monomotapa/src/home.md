@@ -4,4 +4,4 @@ I am currently seeking work in DevOps, Development or Support Engineering with a
 
 I bring with me a deep background in Linux, open source and internet technologies as well as a diversity of other experience (I started out as as a dancer and performance artist) particularly in the non-profit sector.
 
-My background is in systems administration and, more recently support, but my current focus is on coding and development, especially in Python. 
+My background is in systems administration and, more recently, support. My current focus is on coding and development, especially in Python. 
