@@ -291,10 +291,13 @@ def staticpage(page):
 
 @app.route("/resume")
 def resume():
+    """resume page with footer"""
     resume = Page('resume')
     name =  name_obfuscator('paul')
-    footer = '''Download this resume as a <a href="/resume.pdf">PDF</a>.<br>
-        Contact me: <script>address("%s","paulmunday",2,"")</script>''' % name
+    footer = '''<span style="font-size: 1.4em">
+    Download this resume as a <a href="/resume.pdf">PDF</a>.<br> 
+    Contact me: <script>address("%s","paulmunday",2,"")</script>
+    </span>''' % name
     return resume.generate_page(footer=Markup(footer))
 
 @app.route("/resume.pdf")
