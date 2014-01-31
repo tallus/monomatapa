@@ -1,7 +1,7 @@
 ## Key Skills
 **Programming**
 *Core competencies:* Python, Bash/Shell Scripting, Git, Test-driven development.
-*Other languages:* Ruby, Perl, PHP, SQL, AWK/Sed, Processing, Csound  and HTML/CSS. 
+*Other languages:* Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. 
 
 **Linux/Unix Systems and Network Administration**
 High Availability Systems, Apache, MySQL and other databases, email systems
@@ -56,7 +56,7 @@ high availability hosting solution.
 
 **September 2003&ndash;September 2005:
 Tutor**, Bristol Wireless Co-operative. 
-Taught courses, did design work and assisted systems administration for one of Europes largest non-profit wireless networks.
+Taught courses, did design work and assisted systems administration for one of Europe's largest non-profit wireless networks.
 
 **June 2000&ndash;December 2002:
 Systems Administrator**, 2Bet Ltd. Responsible for all systems and network 
