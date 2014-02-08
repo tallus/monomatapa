@@ -1,7 +1,6 @@
 ## Key Skills
 **Programming**
-*Core competencies:* Python, Bash/Shell Scripting, Git, Test-driven development.
-*Other languages:* Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. 
+Python, Bash/Shell Scripting, Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. I use Git for version control. I take a test-driven development approach and value clarity and  readability in code. 
 
 **Linux/Unix Systems and Network Administration**
 High Availability Systems, Apache, MySQL and other databases, email systems
