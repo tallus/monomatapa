@@ -1,6 +1,6 @@
 ## Key Skills
 **Programming**
-Python, Bash/Shell Scripting, Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. I use Git for version control. I take a test-driven development approach and value clarity and  readability in code. 
+Python, Bash/Shell Scripting, Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. I practice test-driven development, use Git for version control, and value clarity and  readability in code.
 
 **Linux/Unix Systems and Network Administration**
 High Availability Systems, Apache, MySQL and other databases, email systems
