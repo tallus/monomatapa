@@ -100,6 +100,13 @@ a.button{
     text-decoration: none;
 }
 
+ul {
+    padding-left: 0.5em;
+    line-height: 1.5em;
+    list-style-type: none;
+    list-style-position: outside;
+} 
+
 ul#nav {
     display: block;
     /*margin: 0 5%;

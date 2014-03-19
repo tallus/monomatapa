@@ -1,81 +1,113 @@
-## Key Skills
-**Programming**
-Python, Bash/Shell Scripting, Perl, PHP, SQL, Ruby, Processing, JavaScript,  HTML/CSS. I practice test-driven development, use Git for version control, and value clarity and  readability in code. In my last job I was writing code to automate manual system tasks and interact with REST API's for data reporting and analysis. I have also worked on data visualization, a Trimet app and I am currently working towards releasing an open source Python module for use with CiviCRM &mdash; CRM software popular with non-profits.
+## Key Skills and Technologies
 
 **Linux/Unix Systems and Network Administration**
-High Availability Systems, Apache, MySQL and other databases, email systems
-e.g. Postfix, DNS etc. Configuration Management Systems e.g Salt Stack, Fabric.
-Systems design. As a systems administrator my primary focus has been on open 
-source and Internet technologies.
+Ubuntu, Debian, Red Hat. Apache, MySQL, LAMP stack,  Email(Postfix), DNS,
+Salt Stack,  Fabric, Wordpress, Drupal, Firewalling with Iptables.
+Network and security analysis with Wireshark, Nmap, tcpdump etc. 
+Linux-HA, DRBD, Heartbeat.
+
+**Programming**
+Python, Bash/Shell Scripting, Perl, PHP, SQL, Ruby, Processing, Git,
+JavaScript, HTML/CSS.
 
 **Technical Support**
-Linux specialist with experience of front and backline support. I have managed others and provided support for them through expert knowledge, mentoring and developing documented solutions to new problems. I have developed software systems and processes in this role. 
+Linux specialist. Third Line technical support and department manager. 
 
-### Other Skills
+###  Other Skills
+**Teaching/Training** 
+A certified and experienced tutor/trainer, I have devised and taught a number of IT
+based courses and workshops including web design, introductory computing, and sound
+editing and radio production. 
 
-**Teaching/Training**
-A certified and experienced tutor/trainer, I have devised and taught a number 
-of IT based courses and workshops including web design, introductory computing, and sound editing and radio production. 
+**Management** I have extensive experience in the non-profit sector, managing paid
+and volunteer staff. This has given me experience and knowledge of the particular 
+challenges faced in this sector including training, recruiting and managing
+volunteers. It has also given me a wider set of skills in leadership, facilitation
+and community building.
 
-**Management**
-I have extensive experience in the non-profit sector, managing paid and 
-volunteer staff. This has given me experience and knowledge of the particular 
-challenges faced in this sector including  training, recruiting and managing 
-volunteers. It has also given me a wider set of skills in leadership, 
-facilitation and community building.
+## Past Work
+**September 2013&ndash;Present: IT Consultant, Northwest Workers Justice Project**
+Donating time as IT Consultant to a Portland based non-profit on a ground up 
+rebuild of their server infrastructure.
 
-### Past Work
+- Developed configuration management using Salt Stack.
+- Implemented replacement for hardware setup using virtual machines built on 
+QEMU/KVM/Libvirt and Debian GNU/Linux.
+- Wrote custom code in Python to transition data off legacy software.
+- Created open source Python module for interacting with CiviCRM REST API.
 
-**November 2010&ndash;December 2013: 
-Technical Support Specialist/Coordinator** at Free Geek. Managed paid workers 
-and volunteers, and provided Level 3 support, in a department offering hardware
-and Linux based software tech support for up to 2000 end users. Outside of core
-duties my initial focus was on rebuilding a chaotic paper based system that 
-often lead to delays of several weeks. By introducing standardized procedures 
-and efficient use of an electronic ticketing system I was able to achieve a 
-target turn around time of three days or less. Later my focus was on developing
-software tools for internal use including a backup and system replication tool
-and a number of  libraries and tools for interacting with the ticket system's 
-API. In addition, I did extensive organizational development outside my
-department and assisted in systems administration where needed. 
+**November 2010&ndash;December 2013: Technical Support Specialist/Coordinator, Free Geek**
+Free Geek is a non-profit that donates 1000 Ubuntu  machines a year to non-profits
+and others with free tech support.
 
-**April 2010&ndash;November 2010:
-Tutor**, SUN project Ron Russell Middle School. Worked as  part time tutor at 
-an after school project teaching IT related courses (e.g. web design).
+- Managed tech support department providing hardware and software support and 
+- provided third line support (Ubuntu Linux).
+- Created a suite of tools for automating tech support tasks including a tool for
+automatic backup and system and data replication across different hardware.
+- (Bash/shell).
+- Wrote a Python library to interact with ticket system api for data reporting 
+- purposes.
+- Developed data recovery process.
+- Implemented use of electronic ticket system.
+- Developed and documented tech support procedures.
+- Linux system administration (Ubuntu and Debian GNU/Linux. Apache, MySQL, RT,
+Postfix).
+- Joint manager of organization.
 
-(February 2009-May 2010: During this time I permanently relocated to the USA 
-and for much of this time was unable to do paid work due to contractual 
-obligations and visa status. I spent my time volunteering in a number of roles
-including IT consultant and teacher.)
+** April 2010&ndash;November 2010: Tutor, SUN project Ron Russell Middle School**
+Worked as part time tutor at an after school project teaching IT related courses 
+(e.g. web design).
 
-**Sept 2005&ndash;January 2009:
-Systems Administrator**, Red Snapper Ltd. Long established web agency with blue
-chip clients. Responsible for all aspects of systems administration. Developed
-high availability hosting solution. 
+February 2009&ndash;May 2010: Relocated to the USA Worked as a volunteer 
+(due to contractual obligations and visa status) in a number of roles including 
+IT consultant and teacher.
 
-**September 2003&ndash;September 2005:
-Tutor**, Bristol Wireless Co-operative. 
-Taught courses, did design work and assisted systems administration for one of Europe's largest non-profit wireless networks.
+** Sept 2005&ndash;January 2009: Systems Administrator, Red Snapper Ltd. ** 
+Full service web development agency.
 
-**June 2000&ndash;December 2002:
-Systems Administrator**, 2Bet Ltd. Responsible for all systems and network 
-administration for a software development company. 
+- Managed multiple servers providing hosting for clients using Apache, MySQL 
+and in house CMS.
+- Implemented replacement high availability cluster using Linux-HA, Heatbeat
+and DRBD for full mirroring across all servers for > 99.9% uptime and >5s 
+failover times.
+- Provided DNS and Email using Postfix/MySQL and TinyDNS for clients and 
+internal use.
+- Managed and implemented internal services such  as vsftpd, LDAP, SVN, IP tables firewall  etc.
+- Sole responsibility for Linux systems administration (Debian). 
+- Worked with developers on managing internal software releases.
+- HTML/CSS coding
 
-**June 1998&ndash;June 2000:
-IT Development Worker**, BPEC. Set up the UK's first low cost public Internet 
-access facility for an educational and environmental non-profit. 
+** September 2003&ndash;September 2005: Tutor, Bristol Wireless Co-operative**
+Taught courses, did design work and assisted systems administration for one of
+Europe's largest non-profit wireless networks using Linux.
 
-**September 1996&ndash;May 1998:
-IT Co-ordinator**, River Ocean Research and Education. Responsible for IT for an environmental non-profit. 
+** June 2000&ndash;December 2002: Systems Administrator, 2Bet Ltd.**
+Responsible for all systems and network administration for a software development 
+company running Tomcat, Apache and MySQL (Linux/Solaris). 
 
-### Community Service and Artistic Practice
+** June 1998&ndash;June 2000: IT Development Worker, BPEC**
+Set up the UK's first low cost public Internet access facility for an educational 
+and environmental non-profit using Linux server with Windows clients.. 
 
-**IT &amp; Open Source**
-I currently donate some of my time to non-profits as an IT consultant. I am a contributor to, and author of, open source projects.
+** September 1996&ndash;May 1998: IT Coordinator, River Ocean Research and Education**
+Responsible for IT for an environmental non-profit (Linux/Windows). 
 
-**Code as art** As  well as my more straight forward projects I an currently working on some code based art pieces using the web as technology for conceptual art. 
+## Community Service and Artistic Practice
+IT &amp; Open Source: I currently donate some of my time to non-profits as an IT 
+consultant and volunteer as a coach with Code Scouts. I am a contributor to, 
+and author of, open source projects.
+
+**Code as Art**
+As well as my more straight forward projects I am currently working on some code 
+based art pieces using the web as technology for conceptual art 
+(Python, Flask, SQLAlchemy). 
+
+**Board Service.**
+I am currently a board member at a newly formed co-operative market and have 
+as served as chair on the board of the Bike Farm.
+
 **Performance**
-I trained for three years in Dance and Performance, and have performed at a
+I trained for three years in Dance and Performance, and have performed at a 
 semi-professional level.
 
 **Radio production and presentation**
