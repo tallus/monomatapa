@@ -37,30 +37,29 @@ QEMU/KVM/Libvirt and Debian GNU/Linux.
 - Created open source Python module for interacting with CiviCRM REST API.
 
 **November 2010&ndash;December 2013: Technical Support Specialist/Coordinator, Free Geek**
-Free Geek is a non-profit that donates 1000 Ubuntu  machines a year to non-profits
-and others with free tech support.
+Free Geek is a non-profit that donates 1000 Ubuntu  machines a year to 
+non-profits and others with free tech support.
 
-- Managed tech support department providing hardware and software support and 
-- provided third line support (Ubuntu Linux).
-- Created a suite of tools for automating tech support tasks including a tool for
-automatic backup and system and data replication across different hardware.
-- (Bash/shell).
+- Managed tech support department providing hardware and software support. 
+- Provided third line support (Ubuntu Linux).
+- Created a suite of tools for automating tech support tasks including a tool 
+ for automatic backup and system and data replication across different hardware. (Bash/shell).
 - Wrote a Python library to interact with ticket system api for data reporting 
-- purposes.
+  purposes.
 - Developed data recovery process.
-- Implemented use of electronic ticket system.
+- Implemented use of electronic ticket system, replacing paper system.
 - Developed and documented tech support procedures.
 - Linux system administration (Ubuntu and Debian GNU/Linux. Apache, MySQL, RT,
 Postfix).
 - Joint manager of organization.
 
 ** April 2010&ndash;November 2010: Tutor, SUN project Ron Russell Middle School**
-Worked as part time tutor at an after school project teaching IT related courses 
+Worked as part time tutor at an after school project teaching IT related courses
 (e.g. web design).
 
-February 2009&ndash;May 2010: Relocated to the USA Worked as a volunteer 
+*February 2009&ndash;May 2010: Relocated to the USA. Worked as a volunteer 
 (due to contractual obligations and visa status) in a number of roles including 
-IT consultant and teacher.
+IT consultant and teacher.*
 
 ** Sept 2005&ndash;January 2009: Systems Administrator, Red Snapper Ltd. ** 
 Full service web development agency.
@@ -75,7 +74,7 @@ internal use.
 - Managed and implemented internal services such  as vsftpd, LDAP, SVN, IP tables firewall  etc.
 - Sole responsibility for Linux systems administration (Debian). 
 - Worked with developers on managing internal software releases.
-- HTML/CSS coding
+- HTML/CSS coding.
 
 ** September 2003&ndash;September 2005: Tutor, Bristol Wireless Co-operative**
 Taught courses, did design work and assisted systems administration for one of
@@ -93,14 +92,14 @@ and environmental non-profit using Linux server with Windows clients..
 Responsible for IT for an environmental non-profit (Linux/Windows). 
 
 ## Community Service and Artistic Practice
-IT &amp; Open Source: I currently donate some of my time to non-profits as an IT 
+IT &amp; Open Source: I currently donate some of my time to non-profits as an IT
 consultant and volunteer as a coach with Code Scouts. I am a contributor to, 
 and author of, open source projects.
 
 **Code as Art**
-As well as my more straight forward projects I am currently working on some code 
-based art pieces using the web as technology for conceptual art 
-(Python, Flask, SQLAlchemy). 
+As well as my more straight forward projects I am currently working on some code
+based art pieces using the web as technology for conceptual art (Python, Flask,
+SQLAlchemy). 
 
 **Board Service.**
 I am currently a board member at a newly formed co-operative market and have 
