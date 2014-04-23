@@ -34,6 +34,10 @@
                 {%- else -%}
                     {{ url_for('staticpage', page=item.base) }}
                 {%- endif -%}
+                
+                {%- if item.rel -%}
+                         " rel="{{item.rel}} 
+                    {%- endif -%}
                 ">{{item.link_text}}</a></li>
                 {% endfor -%}
             </ul>

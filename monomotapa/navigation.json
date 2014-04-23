@@ -1,5 +1,5 @@
 {
-    "nav_order": ["index", "resume", "code",  "colophon", "source"],
+    "nav_order": ["index", "resume", "code", "github",  "colophon", "source"],
     "nav_elements": {
         "index": {
             "link_text": "home",
@@ -9,7 +9,8 @@
             "link text": "about me" 
             },
         "github": {
-            "url": "https://github.com/tallus"
+            "url": "https://github.com/tallus",
+            "rel": "me" 
             },
         "source": {
             "link_text": "view the source",

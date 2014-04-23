@@ -83,7 +83,9 @@ def top_navigation(page):
     which may not be correct. If a url is supplied  it will be used 
     otherwise if urlfor is supplied it the url will be
     generated with url_for(urlfor). url takes precendence so it makes
-    no sense to supply both."""
+    no sense to supply both.
+    Web Sign-in is supported by adding a "rel": "me" attribute.
+    """
     with open(src_file('navigation.json'), 'r') as  navfile:
         navigation = json.load(navfile)
     base_nav = OrderedDict({})
