@@ -12,20 +12,48 @@ cited in :
 Alberto Manguel and Gianni Guadalupi, *The Dictionary of Imaginary Places*, 
 Bloomsbury, London, 1999.
 
-A micro app written using the Flask microframework to manage my personal site.
-It is designed so that publishing a page requires no more than dropping a 
-markdown page in the appropriate directory (though you need to edit a json file
-if you want it to appear in the top navigation). 
+A micro cms written using the Flask microframework, orignally to manage my 
+personal site. It is designed so that publishing a page requires no more than
+dropping a markdown page in the appropriate directory (though you need to edit
+a json file if you want it to appear in the top navigation). 
 
 It can also display its own source code and run its own unit tests.
 
 The name 'monomotapa' was chosen more or less at random (it shares an initial
-with me) as I didn't want to name it after the site and be typing import paulmunday,or something similar,  as that would be strange.
+with me) as I didn't want to name it after the site and be typing import 
+paulmunday, or something similar,  as that would be strange.
 
 Copyright (C) 2014, Paul Munday.
 
-See http://paulmunday.net/license for licensing details.  
+PO Box 28228, Portland, OR, USA 97228
+paul at paulmunday.net
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+There should also be a copy of the GPL in src/license.md that should be accessible  by going to <a href ="/license">/license<a> on this site.
+
+As originally distributed this program will be able to display its own source code, which may count as conveying under the terms of the GPL v3. You should therefore make sure the copy of the GPL (i.e. src/license.md) is left in place.
+
+You are also free to remove this section from the code as long as any modified copy you distribute (including a copy that is unchanged except for removal of this feature) is also licensed under the GPL version 3 (or later versions).
+
+None of this means you have to license your own content this way, only the original source code and any modifications, or any subsequent additions that have been explicitly licensed under the GPL version 3 or later. 
+
+You are therefore free to add templates and style sheets under your own terms though I would be happy if you chose to license them in the same way. 
 """
+# set ENABLE_UNIT_TESTS to false to prevent unit tests being run
+# through the source page
+ENABLE_UNIT_TESTS = True
 
 from flask import render_template, abort, Markup, escape, request, make_response
 
@@ -37,10 +65,8 @@ import markdown
 
 import os.path
 import os
-import json
-import random
 import subprocess
-import tempfile
+import json
 from collections import OrderedDict
 
 from monomotapa import app
@@ -247,20 +273,6 @@ def heading(text, level):
     hl = 'h%s' % str(level)
     return '\n<%s>%s</%s>\n' % (hl, text, hl)
 
-def name_obfuscator(name):
-    """returns name plus a random six character string joined by a .
-    characters are a..z or 0..9"""
-    container = [name, '.']
-    for _ in range(6):
-        # 97 = asci a 
-        randint = random.randint(97,132)
-        # 122 = z, if over that  subtracting 75 converts it to  0..9
-        if randint > 122:
-            randint = randint - 75
-        # add asci character
-        container.append(chr(randint))
-    return "".join(container)
-
 
 # Define routes
 
@@ -291,44 +303,6 @@ def staticpage(page):
 
 # specialized pages
 
-@app.route("/resume")
-def resume():
-    """resume page with footer"""
-    resume = Page('resume')
-    name =  name_obfuscator('paul')
-    footer = '''<span style="font-size: 1.4em">
-    Download this resume as a <a href="/resume.pdf">PDF</a>.<br> 
-    Contact me: <script>address("%s","paulmunday",2,"")</script>
-    </span>''' % name
-    return resume.generate_page(footer=Markup(footer))
-
-@app.route("/resume.pdf")
-def resume_pdf():
-    """renders up to date  resume as pdf from markdown"""
-    # we need to use actual files here are pdf rendering is 
-    # done by call to external util
-    tmpfile =  tempfile.NamedTemporaryFile(delete=False)
-    resume = src_file('resume.md', 'src')
-    output = src_file('resume.pdf', 'src')
-    name = name_obfuscator('paul')
-    domain = 'paulmunday.net'
-    header = "#Paul Munday\nwww.%s&nbsp;&nbsp;%s@%s\n\n" % (domain, 
-        name, domain)
-    with open(tmpfile.name ,'a') as f:
-        f.write(header)
-        with open(resume, 'r') as rfile:
-            contents = rfile.read()
-        f.write(contents)
-    # render pdf and remove temp file
-    subprocess.call(["pandoc", tmpfile.name, "-S", "-o", output]) 
-    os.unlink(tmpfile.name)
-    # read pdf in as string and create flask response
-    with open(output, 'rb') as pdfile:
-        pdf = pdfile.read()
-    response = make_response(pdf, 200)
-    response.headers["Content-Type"] = "Application/pdf"
-    return response
-
 @app.route("/source")
 def source():
     """Display source files used to render a page"""
@@ -341,12 +315,17 @@ def source():
     special_pages = ['source', 'unit-tests', '404']
     if not page in special_pages and pagesrc is None:
         abort(404)
-    contents = '''<p><a href="/unit-tests" class="button">Run unit tests
+    # set ENABLE_UNIT_TESTS to false to prevent unit tests being run
+    # through the source page
+    if ENABLE_UNIT_TESTS:
+        contents = '''<p><a href="/unit-tests" class="button">Run unit tests
     </a></p>'''
-    # render tests.py if needed
-    if page == 'unit-tests':
-        contents += heading('tests.py', 2)
-        contents += render_pygments('tests.py', 'python')
+        # render tests.py if needed
+        if page == 'unit-tests':
+            contents += heading('tests.py', 2)
+            contents += render_pygments('tests.py', 'python')
+    else:
+        contents = ''
     # render views.py
     contents += heading('views.py', 2)
     contents += render_pygments(source_page.get_page_src('views.py'), 

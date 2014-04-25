@@ -133,3 +133,7 @@ hr {
     background-color: #999;
     height: 1px;
 }
+
+blockquote {
+    padding: 0 2em;
+}

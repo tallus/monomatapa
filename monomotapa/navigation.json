@@ -1,16 +1,9 @@
 {
-    "nav_order": ["index", "resume", "code", "github",  "colophon", "source"],
+    "nav_order": ["index", "colophon", "source"],
     "nav_elements": {
         "index": {
             "link_text": "home",
             "urlfor": "index"
-            },
-        "about": {
-            "link text": "about me" 
-            },
-        "github": {
-            "url": "https://github.com/tallus",
-            "rel": "me" 
             },
         "source": {
             "link_text": "view the source",

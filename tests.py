@@ -1,6 +1,39 @@
 """
 Copyright (C) 2014, Paul Munday.
-See http://paulmunday.net/license for licensing details.  
+
+PO Box 28228, Portland, OR, USA 97228
+paul at paulmunday.net
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+There should also be a copy of the GPL in src/license.md that should be accessib
+le  by going to <a href ="/license">/license<a> on this site.
+
+As originally distributed this program will be able to display its own source co
+de, which may count as conveying under the terms of the GPL v3. You should there
+fore make sure the copy of the GPL (i.e. src/license.md) is left in place.
+
+You are also free to remove this section from the code as long as any modified c
+opy you distribute (including a copy that is unchanged except for removal of thi
+s feature) is also licensed under the GPL version 3 (or later versions).
+
+None of this means you have to license your own content this way, only the origi
+nal source code and any modifications, or any subsequent additions that have bee
+n explicitly licensed under the GPL version 3 or later. 
+
+You are therefore free to add templates and style sheets under your own terms th
+ough I would be happy if you chose to license them in the same way. 
 """
 
 import monomotapa
@@ -10,7 +43,7 @@ import os
 import os.path
 
 
-class ResumeTestCase(unittest.TestCase):
+class TestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = monomotapa.app.test_client()
@@ -138,9 +171,6 @@ class ResumeTestCase(unittest.TestCase):
         result = monomotapa.views.heading('test', 1)
         self.assertEquals(result, expected)
     
-    def test_name_obfuscator(self):
-        name = monomotapa.views.name_obfuscator('test')
-        self.assertRegexpMatches(name, 'test\.([a-z]|[0-9]){6}')
 
     # Test page display/routes
     # Some of these  are dependent on templates and contents supplied,
@@ -150,10 +180,10 @@ class ResumeTestCase(unittest.TestCase):
     def test_index(self):
         index_page = self.app.get('/')
         # makes assumptions about templating/content
-        self.assertIn('Paul Munday', index_page.data)
+        self.assertIn('Monomotapa', index_page.data)
         # will fail if md not rendered 
-        self.assertNotIn('None', index_page.data)
-        title = '<title>paulmunday.net::%s</title>' % 'home'
+        self.assertNotIn('Not in this page', index_page.data)
+        title = '%s</title>' % 'home'
         self.assertIn( title, index_page.data)
 
     def test_static_page(self):
@@ -161,7 +191,7 @@ class ResumeTestCase(unittest.TestCase):
         # tests for content
         self.assertIn('test', static_page.data)
         # will fail if md not rendered 
-        self.assertNotIn('None', static_page.data)
+        self.assertNotIn('Not in page', static_page.data)
 
     def test_static_page_heading(self):
         static_page = self.app.get('/' +  self.route)
@@ -172,7 +202,7 @@ class ResumeTestCase(unittest.TestCase):
     def test_static_page_title(self):
         # note dependent of static page template
         static_page = self.app.get('/' +  self.route)
-        title = '<title>paulmunday.net::%s</title>' % self.route.lower()
+        title = '%s</title>' % self.route.lower()
         self.assertIn( title, static_page.data)
 
 
@@ -183,14 +213,7 @@ class ResumeTestCase(unittest.TestCase):
     def test_static_page_200(self):
         static_page = self.app.get('/' + self.route)
         self.assertEquals(static_page.status_code, 200)
- 
-    def test_resume(self):
-        resume_page = self.app.get('/resume')
-        # makes assumptions about templating/content
-        self.assertIn(
-                'Download this resume as a <a href="/resume.pdf">PDF',
-                resume_page.data)
-   
+  
     def test_source_page(self):
         source_page = self.app.get('/source?page=%s' % self.route)
         self.assertIn(self.filename, source_page.data)

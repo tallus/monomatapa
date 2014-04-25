@@ -1,7 +1,16 @@
-Resident of Portland Oregon with 18 years experience of working in I.T.
+Monomotapa is a micro-cms built using the [Flask](http://flask.pocoo.org) microframework for [Python](http://www.python.org) and licensed under the <a href="/license">GNU GPL v3</a>.
 
-I am currently seeking work in DevOps, Software/Web Development or Support Engineering with a coding component.
+Monomotapa:
+----------
+> A city whose inhabitants are bounded by deep feelings of friendship, so that
+> they intuit one another's most secret needs and desire. For instance, if one
+> dreams that his friend is sad, the friend will perceive the distress and 
+> rush to the sleepers rescue.
 
-I bring with me a deep background in Linux, open source and internet technologies as well as a diversity of other experience (I started out as as a dancer and visual artist) particularly in the non-profit sector.
+Jean de La Fontaine, *Fables choisies, mises en vers*, VIII:11 Paris, 2nd ed., 1678-9 
 
-My background is in systems administration and, more recently, support. My current focus is on coding and development, especially in Python. 
+<small>(cited in : 
+Alberto Manguel and Gianni Guadalupi, *The Dictionary of Imaginary Places*, 
+Bloomsbury, London, 1999.)</small>
+
+

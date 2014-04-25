@@ -2,23 +2,11 @@
 "index": {
     "src": "home.md",
     "title": "home", 
-    "heading": "Paul Munday",
+    "heading": "Monomotapa - A Micro-CMS",
      "template": "home.html",
     "trusted": true
     },
- "about": {
-     "title": "about me",
-     "heading": "About Me",
-     "trusted": true
-     },
- "code": {
-     "trusted": true
-    },
  "license": {
-     "trusted": true
-    },
- "resume": {
-     "heading": "Paul Munday",
      "trusted": true
     }
 }
