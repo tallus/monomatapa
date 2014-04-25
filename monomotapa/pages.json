@@ -4,6 +4,8 @@
     "title": "home", 
     "heading": "Monomotapa - A Micro-CMS",
      "template": "home.html",
+     "hlinks" : [{"rel": "openid.delegate", "href":"http://www.paulmunday.net"},
+     {"rel": "openid.server",  "href": "https://indieauth.com/openid"}],
     "trusted": true
     },
  "license": {

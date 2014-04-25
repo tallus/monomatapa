@@ -40,7 +40,6 @@ ough I would be happy if you chose to license them in the same way.
 <head>
 <title>{% if title -%}{{title}}{% endif %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script language="javascript" src="/static/email.js"></script>
 <link href='http://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
 <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"  />
 {% if css %}
@@ -53,6 +52,18 @@ ough I would be happy if you chose to license them in the same way.
     {{internal_css}}
 </style>
 {% endif %}
+{%- if hlinks -%}
+{%- for item in hlinks -%}
+<link 
+        {%- if item.href %} href="{{item.href}}"{% endif -%}
+        {%- if item.rel %} rel="{{item.rel}}"{%- endif %} 
+        {%- if item.type -%} type="{{item.type}}"{%- endif -%}
+        {%- if item.media -%} type="{{item.media}}"{%- endif -%}
+        {%- if item.hreflang -%} type="{{item.hreflang}}"{%- endif -%}
+        {%- if item.charset -%} type="{{item.charset}}"{%- endif -%}
+        >
+{% endfor %}
+{%- endif -%}
 </head>
 <body>
 <div id="wrap">

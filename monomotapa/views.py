@@ -135,8 +135,9 @@ class Page:
         """Define attributes for  pages (if present).
         Sets self.name, self.title, self.heading, self.trusted
         This is done through indirection so we can update the defaults 
-        (defined  in the 'attributes' dictionary  with values from pages.json 
-        easily without lots of if else statements."""
+        (defined  in the 'attributes' dictionary) with values from pages.json
+        easily without lots of if else statements.
+        """
         # set default attributes
         self.page = page.rstrip('/')
         if not title:
@@ -144,10 +145,10 @@ class Page:
         if not heading:
             heading = page.capitalize()
         # will become self.name, self.title, self.heading, 
-        # self.footer, self.template, self.trusted
-        attributes = {'name' : self.page, 'title' : title, 
-            'heading' : heading, 'footer' : None, 
-            template: 'static.html', 'trusted': False}
+        # self.footer, self.template, self.trusted, self.headers
+        attributes = {'name' : self.page, 'title' : title, 'hlinks' : None,
+                'heading' : heading, 'footer' : None, 
+                template: 'static.html', 'trusted': False}
         # overide attributes if set in pages.json
         self.pages = get_page_attributes('pages.json')
         if page in self.pages:
@@ -195,7 +196,8 @@ class Page:
     def generate_page(self, contents=None, internal_css=None, footer=None):
         """return a page generator function.
         For static pages written in Markdown under src/.
-        contents are automatically rendered"""
+        contents are automatically rendered.
+        N.B. See note above in about headers"""
         if not contents:
             contents = self._get_markdown()
         template = self.get_template(self.page)
@@ -203,10 +205,10 @@ class Page:
             footer = self.footer
         def page_generator(contents=contents, heading=self.heading, 
                 title=self.title, internal_css = internal_css, 
-                template=template, footer=footer):
+                hlinks = self.hlinks, template=template, footer=footer):
             return render_template(template,
-                title = title, heading = heading, 
-                internal_css = internal_css, footer = footer,
+                title = title, heading = heading, internal_css = internal_css,
+                hlinks = hlinks, footer = footer,
                 navigation =  top_navigation(self.page), 
                 contents = Markup(contents)),
         return page_generator()
