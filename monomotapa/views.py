@@ -285,7 +285,7 @@ def page_not_found(e):
             title = "404::page not found", heading = "Page Not Found", 
             navigation = top_navigation('404'),
             contents = Markup(
-                "This page in not there, try somewhere else.")), 404
+                "This page is not there, try somewhere else.")), 404
 
 @app.route("/")
 def index():
@@ -304,7 +304,6 @@ def staticpage(page):
     return static_page.generate_page()
 
 # specialized pages
-
 @app.route("/source")
 def source():
     """Display source files used to render a page"""
