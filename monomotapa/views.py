@@ -135,8 +135,7 @@ def top_navigation(page):
 # For pages
 class Page:
     """Generates  pages as objects"""
-    def __init__(self, page, title=None, heading=None, 
-            css = None, hlinks = None, internal_css=None):
+    def __init__(self, page, **kwargs):
         """Define attributes for  pages (if present).
         Sets self.name, self.title, self.heading, self.trusted etc
         This is done through indirection so we can update the defaults 
@@ -155,10 +154,8 @@ class Page:
         self.navigation = top_navigation(self.page)
         self.defaults = get_page_attributes('defaults.json')
         self.pages = get_page_attributes('pages.json')
-        if not title:
-            title = page.lower()
-        if not heading:
-            heading = page.capitalize()
+        title = page.lower()
+        heading = page.capitalize()
         try:
             self.default_template = self.defaults['template']
         except KeyError:
@@ -166,20 +163,27 @@ class Page:
         # will become self.name, self.title, self.heading, 
         # self.footer, self.internal_css, self.trusted
         attributes = {'name' : self.page, 'title' : title,
-                'heading' : heading, 'footer' : None, 
-                'internal_css' : internal_css,
+                'heading' : heading, 'footer' : None,
+                'css' : None , 'hlinks' :None, 'internal_css' : None,
                 'trusted': False}
-        # overide attributes if set in pages.json
+        # set from defaults
+        attributes.update(self.defaults)
+        # override with kwargs
+        attributes.update(kwargs)
+        # override attributes if set in pages.json
         if page in self.pages:
             attributes.update(self.pages[page])
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
-        self.css = css
-        if not css and 'css' in self.defaults:
+        # reset these as we want to append rather than overwrite if supplied
+        if 'css' in kwargs:
+            self.css = kwargs['css']
+        elif 'css' in self.defaults:
                 self.css = self.defaults['css']
-        self.hlinks = hlinks
-        if not hlinks and 'hlinks' in self.defaults:
+        if 'hlinks' in kwargs:
+            self.hlinks = kwargs['hlinks']
+        elif 'hlinks' in self.defaults:
             self.hlinks = self.defaults['hlinks']
         # append hlinks and css from pages.json rather than overwriting
         # if css or hlinks are not supplied they are set to default
@@ -188,9 +192,9 @@ class Page:
                 self.css = self.css + self.pages[page]['css']
             if 'hlinks' in self.pages[page]:
                 self.hlinks = self.hlinks + self.pages[page]['hlinks']
-        # append heading to default if it default exists
-        if 'title' in self.defaults:
-            self.title = self.defaults['title'] + self.title
+        # append heading to default if set in config
+        if app.config['default_title']:
+            self.title = app.config['default_title'] + self.title
 
 
     def _get_markdown(self):

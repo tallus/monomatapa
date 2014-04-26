@@ -49,12 +49,17 @@ CONFIG_FILE = 'config.json'
 
 CONFIG = Config(CONFIG_FILE)
 
-if 'debug' in CONFIG.config:
+try:
     app.debug = CONFIG.config['debug']
-else:
+except KeyError:
     app.debug = False
 
 try:
     app.config['enable_unit_tests'] = CONFIG.config['enable_unit_tests']
 except KeyError:
     app.config['enable_unit_tests'] = False
+
+try:
+    app.config['default_title'] = CONFIG.config['default_title']
+except KeyError:
+    app.config['default_title'] = None
