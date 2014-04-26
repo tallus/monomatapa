@@ -69,6 +69,10 @@ from collections import OrderedDict
 
 from monomotapa import app
 
+class MonomotapaError(Exception):
+    """create classs for own errors"""
+    pass
+
 def get_page_attributes(jsonfile):
     """Returns dictionary of page_attributes.
     Defines additional static page attributes loaded from json file.
@@ -205,6 +209,8 @@ class Page:
             pagetemplate = app.config['default_template']
         if os.path.exists(src_file(pagetemplate , 'templates')):
             return pagetemplate
+        else:
+            raise MonomotapaError("Template: %s not found" % pagetemplate)
 
     def generate_page(self, contents=None, internal_css=None, footer=None):
         """return a page generator function.
