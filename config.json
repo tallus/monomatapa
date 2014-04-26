@@ -1,0 +1,5 @@
+{
+    "debug" : false,
+    "template" : "base.html",
+    "css": ["style.css"]
+}
