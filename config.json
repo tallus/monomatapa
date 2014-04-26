@@ -1,5 +1,5 @@
 {
-    "debug" : false,
-    "template" : "base.html",
+    "debug" : true,
+    "template" : "static.html",
     "css": ["style.css"]
 }
