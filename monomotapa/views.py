@@ -68,6 +68,7 @@ import json
 from collections import OrderedDict
 
 from monomotapa import app
+from config import ConfigError
 
 class MonomotapaError(Exception):
     """create classs for own errors"""
@@ -135,7 +136,7 @@ def top_navigation(page):
 class Page:
     """Generates  pages as objects"""
     def __init__(self, page, title=None, heading=None, 
-            css = None, hlinks = None):
+            css = None, hlinks = None, internal_css=None):
         """Define attributes for  pages (if present).
         Sets self.name, self.title, self.heading, self.trusted etc
         This is done through indirection so we can update the defaults 
@@ -151,32 +152,46 @@ class Page:
         """
         # set default attributes
         self.page = page.rstrip('/')
+        self.navigation = top_navigation(self.page)
+        self.defaults = get_page_attributes('defaults.json')
+        self.pages = get_page_attributes('pages.json')
         if not title:
             title = page.lower()
         if not heading:
             heading = page.capitalize()
+        try:
+            self.default_template = self.defaults['template']
+        except KeyError:
+            raise ConfigError('template not found in default.json')
         # will become self.name, self.title, self.heading, 
-        # self.footer
+        # self.footer, self.internal_css, self.trusted
         attributes = {'name' : self.page, 'title' : title,
-                'heading' : heading, 'footer' : None, 'trusted': False}
+                'heading' : heading, 'footer' : None, 
+                'internal_css' : internal_css,
+                'trusted': False}
         # overide attributes if set in pages.json
-        self.pages = get_page_attributes('pages.json')
         if page in self.pages:
             attributes.update(self.pages[page])
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
+        self.css = css
+        if not css and 'css' in self.defaults:
+                self.css = self.defaults['css']
+        self.hlinks = hlinks
+        if not hlinks and 'hlinks' in self.defaults:
+            self.hlinks = self.defaults['hlinks']
         # append hlinks and css from pages.json rather than overwriting
         # if css or hlinks are not supplied they are set to default
-        if not css:
-            self.css = app.config['default_css']
-        if not hlinks:  
-            self.hlinks = app.config['default_hlinks']
         if page in self.pages:
             if 'css' in self.pages[page]:
                 self.css = self.css + self.pages[page]['css']
             if 'hlinks' in self.pages[page]:
                 self.hlinks = self.hlinks + self.pages[page]['hlinks']
+        # append heading to default if it default exists
+        if 'title' in self.defaults:
+            self.title = self.defaults['title'] + self.title
+
 
     def _get_markdown(self):
         """returns rendered markdown or 404 if source does not exist"""
@@ -206,13 +221,13 @@ class Page:
         """returns the template for the page"""
         pagetemplate = get_page_attribute(self.pages, page, 'template')
         if not pagetemplate:
-            pagetemplate = app.config['default_template']
+            pagetemplate = self.default_template
         if os.path.exists(src_file(pagetemplate , 'templates')):
             return pagetemplate
         else:
             raise MonomotapaError("Template: %s not found" % pagetemplate)
 
-    def generate_page(self, contents=None, internal_css=None, footer=None):
+    def generate_page(self, contents=None):
         """return a page generator function.
         For static pages written in Markdown under src/.
         contents are automatically rendered.
@@ -220,18 +235,10 @@ class Page:
         if not contents:
             contents = self._get_markdown()
         template = self.get_template(self.page)
-        if not footer:
-            footer = self.footer
-        def page_generator(contents=contents, heading=self.heading,
-                title=self.title, css = self.css, internal_css = internal_css,
-                hlinks = self.hlinks, template=template, footer=footer):
-            return render_template(template,
-                title = title, heading = heading, css = css, 
-                internal_css = internal_css,
-                hlinks = hlinks, footer = footer,
-                navigation =  top_navigation(self.page), 
-                contents = Markup(contents)),
-        return page_generator()
+        return render_template(template, 
+                contents = Markup(contents),
+                **vars(self)
+                )
 
 # helper functions
 def src_file(name, directory=None):
@@ -328,7 +335,8 @@ def staticpage(page):
 def source():
     """Display source files used to render a page"""
     source_page = Page('source', title = "view the source code", 
-            heading = "View the Source Code")
+            heading = "View the Source Code",
+            internal_css = get_pygments_css())
     page = request.args.get('page')
     # get source for markdown if any. 404's for non-existant markdown
     # unless special page eg source
@@ -363,14 +371,13 @@ def source():
     contents += heading(template, 2)
     contents += render_pygments(
             source_page.get_page_src(template, 'templates'), 'html')
-    # format contents
-    css = get_pygments_css()
-    return source_page.generate_page(contents, internal_css = css)
+    return source_page.generate_page(contents)
 
 @app.route("/unit-tests")
 def unit_tests():
     """display results of unit tests"""
-    unit_tests = Page('unit-tests', heading = "Test Results")
+    unit_tests = Page('unit-tests', heading = "Test Results", 
+            internal_css = get_pygments_css())
     # exec unit tests in subprocess, capturing stderr
     capture = subprocess.Popen(["python", "tests.py"], 
             stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -391,6 +398,5 @@ def unit_tests():
     # render test.py 
     contents += heading('tests.py', 2)
     contents += render_pygments('tests.py', 'python')
-    css = get_pygments_css()
-    return unit_tests.generate_page(contents, internal_css = css)
+    return unit_tests.generate_page(contents)
 

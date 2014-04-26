@@ -65,7 +65,7 @@ class TestCase(unittest.TestCase):
     def test_Page(self):
         staticpage = monomotapa.views.Page(self.route)
         self.assertEquals(staticpage.name, self.route)
-        self.assertEquals(staticpage.title, self.route.lower())
+        self.assertIn(self.route.lower(), staticpage.title)
         self.assertEquals(staticpage.heading, self.route.capitalize())
         self.assertFalse(staticpage.trusted)
    

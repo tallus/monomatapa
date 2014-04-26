@@ -47,28 +47,14 @@ from monomotapa.config import Config, ConfigError
 # It look for it in CWD, the apps main dir, /etc/monomatapa /etc in that order
 CONFIG_FILE = 'config.json'
 
-config = Config(CONFIG_FILE)
+CONFIG = Config(CONFIG_FILE)
 
-if 'debug' in config.config:
-    app.debug = config.config['debug']
+if 'debug' in CONFIG.config:
+    app.debug = CONFIG.config['debug']
 else:
     app.debug = False
 
 try:
-    app.config['default_template'] = config.config['template']
-except KeyError:
-    raise ConfigError('template not set in %s' % config)
-
-try:
-    app.config['default_css'] = config.config['css']
-except KeyError:
-    app.config['default_css'] = []
-try:
-    app.config['default_hlinks'] = config.config['hlinks']
-except KeyError:
-    app.config['default_hlink'] = []
-
-try:
-    app.config['enable_unit_tests'] = config.config['enable_unit_tests']
+    app.config['enable_unit_tests'] = CONFIG.config['enable_unit_tests']
 except KeyError:
     app.config['enable_unit_tests'] = False
