@@ -37,8 +37,16 @@ You are therefore free to add templates and style sheets under your own terms th
 ough I would be happy if you chose to license them in the same way. 
 """
 from flask import Flask
-
+import sys
 app = Flask(__name__)
 
 from monomotapa import views
+from monomotapa.config import Config, ConfigError
+config = Config('config.json')
+
+if 'debug' in config.config:
+    app.debug = config.config['debug']
+else:
+    app.debug = False
+
 

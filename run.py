@@ -39,5 +39,4 @@ ough I would be happy if you chose to license them in the same way.
 
 from monomotapa import app
 if __name__ == "__main__": 
-    app.debug = True   # for dev purposes only, never production
     app.run()

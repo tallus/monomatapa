@@ -89,7 +89,7 @@ def get_page_attribute(attr_src, page, attribute):
         return attr_src[page][attribute]
     else:
         return None
-
+    
 
 # Navigation
 def top_navigation(page):
@@ -316,8 +316,8 @@ def source():
     special_pages = ['source', 'unit-tests', '404']
     if not page in special_pages and pagesrc is None:
         abort(404)
-    # set ENABLE_UNIT_TESTS to false to prevent unit tests being run
-    # through the source page
+    # set enable_unit_tests  to true  in config.json to allow 
+    #  unit tests to be run  through the source page
     if ENABLE_UNIT_TESTS:
         contents = '''<p><a href="/unit-tests" class="button">Run unit tests
     </a></p>'''
