@@ -151,7 +151,6 @@ class Page:
         """
         # set default attributes
         self.page = page.rstrip('/')
-        self.navigation = top_navigation(self.page)
         self.defaults = get_page_attributes('defaults.json')
         self.pages = get_page_attributes('pages.json')
         title = page.lower()
@@ -163,6 +162,7 @@ class Page:
         # will become self.name, self.title, self.heading, 
         # self.footer, self.internal_css, self.trusted
         attributes = {'name' : self.page, 'title' : title,
+                'navigation' : top_navigation(self.page),
                 'heading' : heading, 'footer' : None,
                 'css' : None , 'hlinks' :None, 'internal_css' : None,
                 'trusted': False}
@@ -312,9 +312,19 @@ def heading(text, level):
 @app.errorhandler(404)
 def page_not_found(e):
     """ provides basic 404 page"""
+    defaults = get_page_attributes('defaults.json')
+    try:
+        css = defaults['css']
+    except KeyError:
+        css = None
+    pages = get_page_attributes('pages.json')
+    if '404' in pages:
+        if'css' in pages['404']:
+            css = pages['404']['css']
     return render_template('static.html', 
             title = "404::page not found", heading = "Page Not Found", 
             navigation = top_navigation('404'),
+            css = css,
             contents = Markup(
                 "This page is not there, try somewhere else.")), 404
 
