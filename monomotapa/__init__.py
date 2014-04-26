@@ -42,11 +42,24 @@ app = Flask(__name__)
 
 from monomotapa import views
 from monomotapa.config import Config, ConfigError
-config = Config('config.json')
+
+# The name of the file not the path
+# It look for it in CWD, the apps main dir, /etc/monomatapa /etc in that order
+CONFIG_FILE = 'config.json'
+
+config = Config(CONFIG_FILE)
 
 if 'debug' in config.config:
     app.debug = config.config['debug']
 else:
     app.debug = False
 
+try:
+    app.config['default_template'] = config.config['template']
+except KeyError:
+    raise ConfigError('template not set in %s' % config)
 
+try:
+    app.config['default_css'] = config.config['css']
+except KeyError:
+    app.config['default_css'] = []

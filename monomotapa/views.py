@@ -131,7 +131,7 @@ def top_navigation(page):
 # For pages
 class Page:
     """Generates  pages as objects"""
-    def __init__(self, page, title=None, heading=None, template = None):
+    def __init__(self, page, title=None, heading=None):
         """Define attributes for  pages (if present).
         Sets self.name, self.title, self.heading, self.trusted
         This is done through indirection so we can update the defaults 
@@ -147,8 +147,7 @@ class Page:
         # will become self.name, self.title, self.heading, 
         # self.footer, self.template, self.trusted, self.headers
         attributes = {'name' : self.page, 'title' : title, 'hlinks' : None,
-                'heading' : heading, 'footer' : None, 
-                template: 'static.html', 'trusted': False}
+                'heading' : heading, 'footer' : None, 'trusted': False}
         # overide attributes if set in pages.json
         self.pages = get_page_attributes('pages.json')
         if page in self.pages:
@@ -185,13 +184,9 @@ class Page:
         """returns the template for the page"""
         pagetemplate = get_page_attribute(self.pages, page, 'template')
         if not pagetemplate:
-            pagetemplate = 'static.html'
+            pagetemplate = app.config['default_template']
         if os.path.exists(src_file(pagetemplate , 'templates')):
             return pagetemplate
-        else:
-            # return static.html if we can't find the template
-            return 'static.html'
-
 
     def generate_page(self, contents=None, internal_css=None, footer=None):
         """return a page generator function.
