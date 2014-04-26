@@ -1,5 +1,7 @@
 {
     "debug" : true,
     "template" : "static.html",
-    "css": ["style.css"]
+    "css": ["style.css"],
+    "hlinks" : [{"href": "http://fonts.googleapis.com/css?family=EB+Garamond",
+        "rel": "stylesheet", "type": "text/css"}] 
 }

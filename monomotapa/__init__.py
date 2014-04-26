@@ -63,3 +63,7 @@ try:
     app.config['default_css'] = config.config['css']
 except KeyError:
     app.config['default_css'] = []
+try:
+    app.config['default_hlinks'] = config.config['hlinks']
+except KeyError:
+    app.config['default_hlink'] = []

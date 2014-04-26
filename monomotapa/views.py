@@ -78,8 +78,11 @@ def get_page_attributes(jsonfile):
     it is sufficient to have a page.md in src for each /page 
     possible values are src (name of markdown file to be rendered)
     heading, title, and trusted (i.e. allow embeded html in markdown)"""
-    with open(src_file(jsonfile), 'r') as pagesfile:
-        page_attributes = json.load(pagesfile)
+    try:
+        with open(src_file(jsonfile), 'r') as pagesfile:
+            page_attributes = json.load(pagesfile)
+    except IOError:
+            page_attributes = []
     return page_attributes
 
 def get_page_attribute(attr_src, page, attribute):
@@ -126,17 +129,23 @@ def top_navigation(page):
     return {'navigation' :  base_nav, 'page' : page}
 
 
-
-
 # For pages
 class Page:
     """Generates  pages as objects"""
-    def __init__(self, page, title=None, heading=None):
+    def __init__(self, page, title=None, heading=None, 
+            css = None, hlinks = None):
         """Define attributes for  pages (if present).
-        Sets self.name, self.title, self.heading, self.trusted
+        Sets self.name, self.title, self.heading, self.trusted etc
         This is done through indirection so we can update the defaults 
-        (defined  in the 'attributes' dictionary) with values from pages.json
-        easily without lots of if else statements.
+        (defined  in the 'attributes' dictionary) with values from config.json
+        or pages.json easily without lots of if else statements.
+        If css is supplied it will overide any default css. To add additional
+        style sheets on a per page basis specifiy them in pages.json.
+        The same also applies with hlinks.
+        css is used to set locally hosted stylesheets only. To specify 
+        external stylesheets use hlinks: in config.json for 
+        default values that will apply on all pages unless overidden, set here
+        to override the default. Set in pages.json to add after default.
         """
         # set default attributes
         self.page = page.rstrip('/')
@@ -145,8 +154,8 @@ class Page:
         if not heading:
             heading = page.capitalize()
         # will become self.name, self.title, self.heading, 
-        # self.footer, self.template, self.trusted, self.headers
-        attributes = {'name' : self.page, 'title' : title, 'hlinks' : None,
+        # self.footer
+        attributes = {'name' : self.page, 'title' : title,
                 'heading' : heading, 'footer' : None, 'trusted': False}
         # overide attributes if set in pages.json
         self.pages = get_page_attributes('pages.json')
@@ -155,6 +164,17 @@ class Page:
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             vars(self)[attribute] = value
+        # append hlinks and css from pages.json rather than overwriting
+        # if css or hlinks are not supplied they are set to default
+        if not css:
+            self.css = app.config['default_css']
+        if not hlinks:  
+            self.hlinks = app.config['default_hlinks']
+        if page in self.pages:
+            if 'css' in self.pages[page]:
+                self.css = self.css + self.pages[page]['css']
+            if 'hlinks' in self.pages[page]:
+                self.hlinks = self.hlinks + self.pages[page]['hlinks']
 
     def _get_markdown(self):
         """returns rendered markdown or 404 if source does not exist"""
@@ -198,11 +218,12 @@ class Page:
         template = self.get_template(self.page)
         if not footer:
             footer = self.footer
-        def page_generator(contents=contents, heading=self.heading, 
-                title=self.title, internal_css = internal_css, 
+        def page_generator(contents=contents, heading=self.heading,
+                title=self.title, css = self.css, internal_css = internal_css,
                 hlinks = self.hlinks, template=template, footer=footer):
             return render_template(template,
-                title = title, heading = heading, internal_css = internal_css,
+                title = title, heading = heading, css = css, 
+                internal_css = internal_css,
                 hlinks = hlinks, footer = footer,
                 navigation =  top_navigation(self.page), 
                 contents = Markup(contents)),
