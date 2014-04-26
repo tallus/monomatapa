@@ -1,5 +1,6 @@
 {
     "debug" : true,
+    "enable_unit_tests" : true,
     "template" : "static.html",
     "css": ["style.css"],
     "hlinks" : [{"href": "http://fonts.googleapis.com/css?family=EB+Garamond",

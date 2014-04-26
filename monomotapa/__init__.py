@@ -67,3 +67,8 @@ try:
     app.config['default_hlinks'] = config.config['hlinks']
 except KeyError:
     app.config['default_hlink'] = []
+
+try:
+    app.config['enable_unit_tests'] = config.config['enable_unit_tests']
+except KeyError:
+    app.config['enable_unit_tests'] = False

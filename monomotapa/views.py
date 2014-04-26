@@ -51,9 +51,7 @@ None of this means you have to license your own content this way, only the origi
 
 You are therefore free to add templates and style sheets under your own terms though I would be happy if you chose to license them in the same way. 
 """
-# set ENABLE_UNIT_TESTS to false to prevent unit tests being run
-# through the source page
-ENABLE_UNIT_TESTS = True
+
 
 from flask import render_template, abort, Markup, escape, request, make_response
 
@@ -334,7 +332,7 @@ def source():
         abort(404)
     # set enable_unit_tests  to true  in config.json to allow 
     #  unit tests to be run  through the source page
-    if ENABLE_UNIT_TESTS:
+    if app.config['enable_unit_tests']:
         contents = '''<p><a href="/unit-tests" class="button">Run unit tests
     </a></p>'''
         # render tests.py if needed
