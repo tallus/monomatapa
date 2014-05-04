@@ -1,7 +1,7 @@
 Monomatapa
 ==========
 
-**A Micro-CMS using Flask.**
+**A Micro CMS using Flask.**
 
 Monomotapa:
 > a city whose inhabitants are bounded by deep feelings of friendship, so that
