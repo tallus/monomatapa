@@ -23,13 +23,14 @@ The name 'monomotapa' was chosen more or less at random (it shares an initial
 with me) as I didn't want to name it after the site and be typing import 
 paulmunday, or something similar,  as that would be strange.
 
+Monomotapa - A Micro CMS
 Copyright (C) 2014, Paul Munday.
 
 PO Box 28228, Portland, OR, USA 97228
 paul at paulmunday.net
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under the terms of the GNU Affero  Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
@@ -38,18 +39,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-There should also be a copy of the GPL in src/license.md that should be accessible  by going to <a href ="/license">/license<a> on this site.
-
-As originally distributed this program will be able to display its own source code, which may count as conveying under the terms of the GPL v3. You should therefore make sure the copy of the GPL (i.e. src/license.md) is left in place.
-
-You are also free to remove this section from the code as long as any modified copy you distribute (including a copy that is unchanged except for removal of this feature) is also licensed under the GPL version 3 (or later versions).
-
-None of this means you have to license your own content this way, only the original source code and any modifications, or any subsequent additions that have been explicitly licensed under the GPL version 3 or later. 
-
-You are therefore free to add templates and style sheets under your own terms though I would be happy if you chose to license them in the same way. 
+There should also be a copy of the GPL in src/license.md that should be accessible by going to <a href ="/license">/license<a> on this site.
 """
 
 
