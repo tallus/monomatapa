@@ -15,6 +15,8 @@ cited in :
 Alberto Manguel and Gianni Guadalupi, *The Dictionary of Imaginary Places*, 
 Bloomsbury, London, 1999.
 
+(Read *Fables choisies, mises en vers* in [English](http://books.google.com/books?id=k2kCAAAAQAAJ) or the original [French](https://archive.org/details/fableschoisiesmi00lafo)
+
 A micro cms written using the Flask microframework, orignally to manage my 
 personal site. It is designed so that publishing a page requires no more than
 dropping a markdown page in the appropriate directory (though you need to edit
