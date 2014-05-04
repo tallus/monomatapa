@@ -4,13 +4,12 @@ Monomatapa
 **A Micro-CMS using Flask.**
 
 Monomotapa:
-    a city whose inhabitants are bounded by deep feelings of friendship, so that
-    they intuit one another's most secret needs and desire. For instance, if one
-    dreams that his friend is sad, the friend will perceive the distress and 
-    rush to the sleepers rescue.
+> a city whose inhabitants are bounded by deep feelings of friendship, so that
+> they intuit one another's most secret needs and desire. For instance, if one
+> dreams that his friend is sad, the friend will perceive the distress and 
+> rush to the sleepers rescue.
 
-    (Jean de La Fontaine, *Fables choisies, mises en vers*, VIII:11 Paris, 
-    2nd ed., 1678-9)
+>(Jean de La Fontaine, *Fables choisies, mises en vers*, VIII:11 Paris, 2nd ed., 1678-9)
 
 cited in : 
 Alberto Manguel and Gianni Guadalupi, *The Dictionary of Imaginary Places*, 
@@ -23,7 +22,7 @@ a json file if you want it to appear in the top navigation).
 
 It can also display its own source code and run its own unit tests.
 
-The name 'monomotapa' was chosen more or less at random (it shares an initial
+The name 'Monomotapa' was chosen more or less at random (it shares an initial
 with me) as I didn't want to name it after the site and be typing import 
 paulmunday, or something similar, as that would be strange.
 
