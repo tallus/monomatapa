@@ -1,4 +1,25 @@
 """
+Monomotapa - A Micro CMS
+Copyright (C) 2014, Paul Munday.
+
+PO Box 28228, Portland, OR, USA 97228
+paul at paulmunday.net
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero  Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+There should also be a copy of the GPL in src/license.md that should be accessible by going to <a href ="/license">/license<a> on this site.
+
 Monomotapa:
     a city whose inhabitants are bounded by deep feelings of friendship, so that
     they intuit one another's most secret needs and desire. For instance, if one
@@ -23,26 +44,6 @@ The name 'monomotapa' was chosen more or less at random (it shares an initial
 with me) as I didn't want to name it after the site and be typing import 
 paulmunday, or something similar,  as that would be strange.
 
-Monomotapa - A Micro CMS
-Copyright (C) 2014, Paul Munday.
-
-PO Box 28228, Portland, OR, USA 97228
-paul at paulmunday.net
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero  Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-There should also be a copy of the GPL in src/license.md that should be accessible by going to <a href ="/license">/license<a> on this site.
 """
 
 
