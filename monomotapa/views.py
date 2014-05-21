@@ -18,13 +18,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-There should also be a copy of the GPL in src/license.md that should be accessible by going to <a href ="/license">/license<a> on this site.
+There should also be a copy of the GPL in src/license.md that should be
+accessible by going to <a href ="/license">/license<a> on this site.
 
 Monomotapa:
-    a city whose inhabitants are bounded by deep feelings of friendship, so that
-    they intuit one another's most secret needs and desire. For instance, if one
-    dreams that his friend is sad, the friend will perceive the distress and 
-    rush to the sleepers rescue.
+    a city whose inhabitants are bounded by deep feelings of friendship, 
+    so that they intuit one another's most secret needs and desire. 
+    For instance, if one dreams that his friend is sad, the friend will
+    perceive the distress and rush to the sleepers rescue.
 
     (Jean de La Fontaine, *Fables choisies, mises en vers*, VIII:11 Paris, 
     2nd ed., 1678-9)
@@ -47,7 +48,7 @@ paulmunday, or something similar,  as that would be strange.
 """
 
 
-from flask import render_template, abort, Markup, escape, request, make_response
+from flask import render_template, abort, Markup, escape, request #, make_response
 
 from pygments import highlight
 from pygments.lexers import PythonLexer, HtmlDjangoLexer, TextLexer
@@ -62,7 +63,7 @@ import json
 from collections import OrderedDict
 
 from monomotapa import app
-from config import ConfigError
+from monomotapa.config import ConfigError
 
 class MonomotapaError(Exception):
     """create classs for own errors"""
@@ -79,7 +80,7 @@ def get_page_attributes(jsonfile):
         with open(src_file(jsonfile), 'r') as pagesfile:
             page_attributes = json.load(pagesfile)
     except IOError:
-            page_attributes = []
+        page_attributes = []
     return page_attributes
 
 def get_page_attribute(attr_src, page, attribute):
@@ -169,12 +170,12 @@ class Page:
             attributes.update(self.pages[page])
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
-            vars(self)[attribute] = value
+            setattr(self, attribute, value)
         # reset these as we want to append rather than overwrite if supplied
         if 'css' in kwargs:
             self.css = kwargs['css']
         elif 'css' in self.defaults:
-                self.css = self.defaults['css']
+            self.css = self.defaults['css']
         if 'hlinks' in kwargs:
             self.hlinks = kwargs['hlinks']
         elif 'hlinks' in self.defaults:
@@ -297,8 +298,8 @@ def get_pygments_css(style=None):
 
 def heading(text, level):
     """return as html heading at h[level]"""
-    hl = 'h%s' % str(level)
-    return '\n<%s>%s</%s>\n' % (hl, text, hl)
+    heading_level = 'h%s' % str(level)
+    return '\n<%s>%s</%s>\n' % (heading_level, text, heading_level)
 
 
 # Define routes
@@ -325,8 +326,8 @@ def page_not_found(e):
 @app.route("/")
 def index():
     """provides index page"""
-    index = Page('index')
-    return index.generate_page()
+    index_page = Page('index')
+    return index_page.generate_page()
 
 # default route is it doe not exist elsewhere
 @app.route("/<path:page>")
@@ -384,7 +385,7 @@ def source():
 @app.route("/unit-tests")
 def unit_tests():
     """display results of unit tests"""
-    unit_tests = Page('unit-tests', heading = "Test Results", 
+    unittests = Page('unit-tests', heading = "Test Results", 
             internal_css = get_pygments_css())
     # exec unit tests in subprocess, capturing stderr
     capture = subprocess.Popen(["python", "tests.py"], 
@@ -406,5 +407,5 @@ def unit_tests():
     # render test.py 
     contents += heading('tests.py', 2)
     contents += render_pygments('tests.py', 'python')
-    return unit_tests.generate_page(contents)
+    return unittests.generate_page(contents)
 
