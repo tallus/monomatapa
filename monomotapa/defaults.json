@@ -1,6 +1,6 @@
 {
     "template" : "static.html",
     "css" : ["style.css"],
-    "hlinks" : [{"href": "http://fonts.googleapis.com/css?family=EB+Garamond",
+    "hlinks" : [{"href": "//brick.a.ssl.fastly.net/EB+Garamond:400,400i",
     "rel" : "stylesheet", "type": "text/css"}]
 }
