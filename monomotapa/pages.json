@@ -10,5 +10,11 @@
     },
  "license": {
      "trusted": true
+    },
+"test-post": {
+    "heading": "A Post",
+    "template": "post.html",
+    "type": "post",
+    "attributes" : {"date": "2014-06-04", "date-text": "June 04, 2014.", "author": "Paul M.", "summary": "A test post."}
     }
 }

@@ -169,7 +169,9 @@ class Page:
             attributes.update(self.pages[page])
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
-            vars(self)[attribute] = value
+            print(attribute, value)
+            setattr(self,attribute, value)
+            #vars(self)[attribute] = value
         # reset these as we want to append rather than overwrite if supplied
         if 'css' in kwargs:
             self.css = kwargs['css']
