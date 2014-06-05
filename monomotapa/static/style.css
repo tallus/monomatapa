@@ -21,6 +21,10 @@ div#wrap {
     min-height: 100%;
 }
 
+div#nav {
+    padding-top: 0.2%;
+    padding-bottom: 0.2%;
+}
 div#main {
     overflow:auto;
     padding-bottom: 50px;  /* must be same height as the footer */  
