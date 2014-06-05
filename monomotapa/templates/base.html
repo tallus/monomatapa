@@ -88,23 +88,8 @@ ough I would be happy if you chose to license them in the same way.
                 {% endfor -%}
             </ul>
         </div>
-        <div> 
-            {% if heading %}<h1>{{heading}}</h1>{% endif %}
-        </div> 
-        <div id="messages">
-            <hr>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-        <div id="content">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
+        {% block content %}{% endblock %}
+           </div>
 </div>
 <div id="footer">
     <p id="footer">

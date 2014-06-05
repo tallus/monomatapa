@@ -40,6 +40,21 @@ ough I would be happy if you chose to license them in the same way.
 {% extends "base.html" %}
 <!-- <div id="contents"> -->
     {% block content %}
+    <div> 
+            {% if heading %}<h1>{{heading}}</h1>{% endif %}
+        </div> 
+        <div id="messages">
+            <hr>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div id="content">
         {{contents}}
+        </div>
     {% endblock %}
-<!-- </div>  -->
+!-- </div>  -->
