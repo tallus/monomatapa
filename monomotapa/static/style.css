@@ -112,6 +112,8 @@ ul#nav {
     /*margin: 0 5%;
     padding: 0;*/
     padding-left: 5%;
+    padding-top: 0.2%;
+    padding-bottom: 0.2%;
     list-style-type: none;
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 1.2em;
