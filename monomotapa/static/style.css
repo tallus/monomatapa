@@ -40,7 +40,11 @@ div#footer {
     clear:both; 
 }
 
-div#content {
+div#attributes {
+    padding: 1% 7%;
+}
+
+div.e-content {
     padding: 1% 2%;
 }
 
@@ -79,6 +83,15 @@ p {
     padding:0.5em 0;
 }
 
+p#post-details {
+    font-style: italic;
+    text-align:right;
+    font-size: 1.1em;
+}
+p.p-summary {
+    font-style: italic;
+    font-size: 1.2em;
+}
 p#footer {
     padding-top: 15px;
     font-size: 0.8em;
@@ -100,6 +113,9 @@ a.button{
     text-decoration: none;
 }
 
+a.u-url{
+    font-size:0.9em;
+}
 ul {
     padding-left: 0.5em;
     line-height: 1.5em;
@@ -112,6 +128,8 @@ ul#nav {
     /*margin: 0 5%;
     padding: 0;*/
     padding-left: 5%;
+    padding-top: 0.2%;
+    padding-bottom: 0.2%;
     list-style-type: none;
     font-family: 'EB Garamond', Garamond, serif;
     font-size: 1.2em;

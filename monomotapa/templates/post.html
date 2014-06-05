@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="h-entry">
+    <div> 
+            {% if heading %}<h1 class="p-name">{{heading}}</h1>{% endif %}
+        </div> 
+            <hr>
+            <div id="attributes">
+                <p id="post-details">
+            {% if attributes['date'] %}
+                <time class="dt-published" datetime="{{attributes['date']}}">
+                {% if attributes['date-text'] %} 
+                    {{attributes['date-text']}}
+                {% else %}
+                    {{attributes['date']}}
+                {% endif %}
+                </time>
+                {% endif %}
+            {% if attributes['author'] %}
+            <span class="p-author">{{attributes['author']}}</span>
+            {% endif %}
+            <a class="u-url" href="/{{name}}">permalink.</a>
+                </p>
+        {% if attributes['summary'] %}
+        <p class="p-summary">{{attributes['summary']}}</p>
+        {% endif %}
+        </div>
+        <div class='e-content'> 
+        {{contents}}
+    </div>
+    </article>
+    {% endblock %}

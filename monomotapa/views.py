@@ -18,14 +18,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-There should also be a copy of the GPL in src/license.md that should be
-accessible by going to <a href ="/license">/license<a> on this site.
 
 Monomotapa:
     a city whose inhabitants are bounded by deep feelings of friendship, 
     so that they intuit one another's most secret needs and desire. 
     For instance, if one dreams that his friend is sad, the friend will
     perceive the distress and rush to the sleepers rescue.
+
 
     (Jean de La Fontaine, *Fables choisies, mises en vers*, VIII:11 Paris, 
     2nd ed., 1678-9)
@@ -171,6 +170,7 @@ class Page:
         # set attributes (as self.name etc)  using indirection
         for attribute, value in attributes.iteritems():
             setattr(self, attribute, value)
+            setattr(self,attribute, value)
         # reset these as we want to append rather than overwrite if supplied
         if 'css' in kwargs:
             self.css = kwargs['css']
