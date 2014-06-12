@@ -47,3 +47,4 @@ Vagrantfile
 *.bak
 *.pdf
 TODO
+.venv
