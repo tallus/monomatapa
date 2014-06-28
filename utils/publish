@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+"""Writes json for publishing a post"""
+from __future__ import absolute_import, print_function, unicode_literals
+
+import argparse
+import json
+import os.path
+import datetime
+
+def get_options():
+    """get command line arguments"""
+    parser = argparse.ArgumentParser(description =
+        """Publish posts with Monomotapa.
+        Takes the name of the file you wish to publish.""")
+    parser.add_argument("file")
+    parser.add_argument("-t", "--type", default="post", choices=['post'],
+            help = "Type of post you wish to publish. Defaults to post")
+    parser.add_argument("-r", "--reply", 
+            help="The url of the post you are replying to.")
+    parser.add_argument("-d", "--date-text", 
+            help="optional publication date, as a string") 
+    parser.add_argument("-D", "--pub-date",
+            help="date of publication, defaults to today")
+    parser.add_argument("-a", "--author", help="optional author") 
+    parser.add_argument("-T", "--title", help="optional title") 
+    parser.add_argument("-H", "--heading", help="optional heading") 
+    parser.add_argument("-s", "---summary", help="optional summary")
+    parser.add_argument("-u" "--author-url",  help="optional url for author")
+    parser.add_argument("-p", "--pages-file", default="pages.json", 
+            help="location of pages.json file or equivalent" )
+    parser.add_argument("--trusted",  action="store_true",
+            help="files is trusted and may contain html")
+    args = parser.parse_args()
+    return args
+
+
+def main():
+    """Main"""
+    templates = {
+            "post" : "post.html"
+            }
+    args = get_options()
+    with open(args.pages_file, "r") as pages_file:
+        pages = json.load(pages_file)
+    page = os.path.splitext(args.file)[0]
+    if args.pub_date:
+        date = args.pub_date
+    else:
+        now = datetime.datetime.now()
+        date = now.strftime("%Y-%m-%d")
+    if args.date_text:
+        date_text = args.date_text
+    elif not args.pub_date:
+        date_text = now.strftime("%A %B  %m, %Y")
+    post = {
+        "type" : args.type,
+        "template" : templates[args.type],
+    }
+    attributes = {"date" : date}
+    if args.author:
+        attributes["author"] = args.author
+        #if args.author_url:
+        #    post['name'] = args.author_url
+    if args.title:
+        post["title"] = args.title
+    if args.heading:
+        post["heading"] = args.heading
+    if date_text:
+        attributes["date-text"] = date_text
+    if args.summary:
+        attributes["summary"] = args.summary
+    if args.trusted:
+        post["trusted"] = True
+
+    pages[page] = post
+    with open(args.pages_file, 'w') as pages_file:
+        json.dump(pages, pages_file)
+    print("Don't forget to commit and push your changes.")
+if __name__ == "__main__":
+    main()
