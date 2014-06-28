@@ -68,7 +68,8 @@ def main():
         attributes["summary"] = args.summary
     if args.trusted:
         post["trusted"] = True
-
+    
+    post['attributes'] = attributes
     pages[page] = post
     with open(args.pages_file, 'w') as pages_file:
         json.dump(pages, pages_file)
