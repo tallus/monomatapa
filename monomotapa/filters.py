@@ -1,6 +1,6 @@
 """Filters for jinja 2"""
 # Conversion Constants
-H_VALS = [
+H_VALS = (
     'adr',
     'card',
     'event',
@@ -12,9 +12,9 @@ H_VALS = [
     'resume',
     'review',
     'review-aggregate'
-]
+)
 
-DT_VALS = [
+DT_VALS = (
     'anniversary',
     'bday',
     'duration',
@@ -23,9 +23,9 @@ DT_VALS = [
     'reviewed',
     'start',
     'update'
-]
+)
 	
-P_VALS = [
+P_VALS = (
     'additional-name',
     'adr',
     'affiliation',
@@ -76,16 +76,16 @@ P_VALS = [
     'votes',
     'worst',
     'yield'
-]
+)
 
 
-E_VALS =  [
+E_VALS =  (
     'content',
     'description',
     'instructions'
-]
+)
 
-U_VALS = [
+U_VALS = (
     'email',
     'impp',
     'key',
@@ -93,9 +93,14 @@ U_VALS = [
     'photo',
     'uid',
     'url'
-  ]
+  )
 
 CONVERT = {'address' : 'h-adr'}
+
+
+def get_val(string):
+    """convert an argument to it's p- etc form"""
+
 
 @app.template_filter('h-render')
 def h_render(struct):
@@ -117,4 +122,5 @@ def h_render(struct):
         </div>
     </div>
     """
+    # if value = list then result = "%s %s"(result, h_render(value)
     pass
