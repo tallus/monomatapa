@@ -265,10 +265,12 @@ def render_markdown(srcfile, trusted=False):
         which allows embedded html."""
     try:
         with open(srcfile, 'r') as f:
+            src = f.read()
+            src = src.decode('utf-8')
             if trusted == True:
-                return markdown.markdown(f.read())
+                return markdown.markdown(src)
             else:
-                return markdown.markdown(escape(f.read()))
+                return markdown.markdown(escape(src))
     except IOError:
         return None
 
