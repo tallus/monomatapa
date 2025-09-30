@@ -3,7 +3,7 @@ Jinja2==3.1.6
 Markdown==2.3.1
 MarkupSafe==0.18
 Pillow==10.3.0
-Pygments==1.6
+Pygments==2.15.0
 Werkzeug==3.0.6
 distribute==0.6.24
 html5lib==1.0b3
