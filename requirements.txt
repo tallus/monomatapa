@@ -2,7 +2,7 @@ Flask==0.10.1
 Jinja2==3.1.6
 Markdown==2.3.1
 MarkupSafe==0.18
-Pillow==2.3.0
+Pillow==10.3.0
 Pygments==1.6
 Werkzeug==3.0.6
 distribute==0.6.24
