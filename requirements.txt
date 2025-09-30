@@ -4,7 +4,7 @@ Markdown==2.3.1
 MarkupSafe==0.18
 Pillow==2.3.0
 Pygments==1.6
-Werkzeug==0.9.4
+Werkzeug==3.0.6
 distribute==0.6.24
 html5lib==1.0b3
 itsdangerous==0.23
